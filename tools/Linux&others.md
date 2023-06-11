@@ -186,3 +186,9 @@ $ git config --global user.email 527609724@qq.com
     * `:s/going/rolling`：当前行的第一个
     * `:s/going/rolling/g`:当前行的全部
     * `%s/going/rolling/g`:全部文件
+# Postman
+* Postman中的param与body中的form-data的区别？
+get请求，可以在param中添加参数，会自动在url的后面加上?name=cbc&age=10
+post请求，在form-data中添加数据，就相当于通过表单进行post提交
+* 通过postman查看http请求报文
+view-> postman console

@@ -486,6 +486,7 @@ public class AutoWiredTest {
     /*
         作用：
         将前端传过来的json数据，转化为一个对象，并赋值给person
+        (会自动进行属性转化：如果匹配的上就赋值，否则为默认值)
     */
     public string test(@RequestBody Person person){
 
@@ -704,7 +705,7 @@ SpringBoot最后生成的就是一个jar包，它里面内嵌了tomcat，所以�
 <img src="why SpringBoot.png" width="400px">
 2、SpringBoot把配置文件全部砍掉了
 
-* Lombok
+## Lombok
 简化JavaBean的开发
     * 使用
     1、`@Data`注解自动帮我们写好set、get、toString、hashcode方法
@@ -712,7 +713,14 @@ SpringBoot最后生成的就是一个jar包，它里面内嵌了tomcat，所以�
     注意：`@AllArgsConstructor`默认是全参构造器，如果想要定制，就需要自己手写
 
 * yaml
+* slf4j
+```java
+引入lombok后，直接在使用的类上加上`@Slf4j`
+log.info("开始启动");//在运行的时候显示
+log.debug("xxx") //只有在debug的模式下才显示
 
+log.error("这是{}","{}占位符");//通过{}进行占位
+```
 
 ## 注解
 * `@Configuration`
@@ -740,6 +748,12 @@ SpringBoot最后生成的就是一个jar包，它里面内嵌了tomcat，所以�
         }
     }
     ```
+* `@RequestParam`,`@RequestBody`,`@RequestPart`的区别
+看你需求
+get请求：想要提取url后面的参数，通常使用`@RequestParam`
+post请求：想要将body中的json自动转化为一个java对象，使用`@RequestBody`;
+如果只想得到表单中的某一项的值，也可以使用`@RequestParam`
+如果想把body中的文件自动转化为一个multipart对象，使用`@RequestPart`
 ## web开发
 * 静态资源访问
 `localhost:8080/a.jpg`，对于`/a.jpg`的访问，springboot会先去匹配所有的controller，如果没有，就去一些目录下匹配静态资源。
