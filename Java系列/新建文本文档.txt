@@ -1,0 +1,2 @@
+# 数据库
+* DB、DBMS、SQL的理解：DB就是数据库，一个个文件，类似.doc,.mp3;DBMS就是mysql，一个软件，来管理DB，通过SQL语句
