@@ -49,6 +49,7 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 * 自动补全new Thread前面的 ：alt+enter
 * 选中当前单词：ctrl+w
 * 在当前行上面加一行：ctrl+alt+enter；在当前行下面加一行：shift+enter
+* try-catch快捷键：选中代码，ctrl+alt+t
 # VScode
 |快捷键|作用|
 |-|-|
@@ -60,6 +61,8 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 |Ctrl+enter|在当前行下插入一行|
 |Ctrl+shift+enter|在当前行上插入一行|
 |Ctrl+Alt+↓|选中多行|
+* vscode逐个替换
+[link](https://blog.csdn.net/fantasyYXQ/article/details/125607352)
 # Markdown Preview Enhanced 
 * [link](https://blog.csdn.net/while0/article/details/124677531?spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=10)
 * esc：在vscode预览模式下显示目录
@@ -144,6 +147,19 @@ git rm -f --cached a.c
 直接在.git同级目录下新建`.gitignore`文件
 怎么写：[link](https://www.w3schools.com/git/git_ignore.asp?remote=github)
 .gitignore只能在文件untrack时有效，如果某个文件已经被`git add`了甚至`git commit`了，那需要先`git rm`后才会生效
+* 当工作区与暂存区不一致是：`Changes not staged for commit:`,只有他俩一样才能commit
+通过`git add`将工作区中的文件添加到暂存区
+通过`git rm`将暂存区的文件删除
+他们的目的都是使工作区和暂存区一致，然后好commit
+* 我不小心把一些没有用的文件给add了，导致尽管已经在`.gitignore`文件中声明了，但是不生效
+```bash
+# 请使用git bash：windows下的terminal文件夹表示方法很奇怪
+git rm --cached -r --ignore-unmatch **/**/.mvn
+# git rm --cached 只删除暂存区中的文件，保留本地文件。如果不加--cached，就会导致本地文件也被删除掉
+# -r git rm像rm命令一样，是不能直接rm folder删除文件夹的；想要删除文件夹，需要加上-r
+# --ignore-unmatch：如果某个匹配文件夹中为空，git就会直接报错，结束命令，导致后面的文件夹都没法删除。--ignore-unmatch让git如果文件夹为空，也要继续执行，不要报错中断
+# *.c匹配所有.c文件，**匹配所有文件夹
+```
 ## 远程
 * `git remote`
     * `git remote add git-demo https://xxx`：将链接取别名为git-demo

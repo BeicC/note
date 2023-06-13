@@ -697,6 +697,8 @@ public class ExceptionHandler {
 
 
 # SpringBoot
+* 为什么SpringBoot项目刚启动就结束？
+添加web依赖
 * SpringBoot的好处
 1、在原先我们要在服务器上装tomcat，再把web项目打成war包部署到tomocat里。
 但通常情况下一个tomcat我们只部署一个项目，因为太吃资源
@@ -704,7 +706,51 @@ public class ExceptionHandler {
 SpringBoot最后生成的就是一个jar包，它里面内嵌了tomcat，所以我们在服务器上只需要一个java -jar就可以直接把web项目跑起来了
 <img src="why SpringBoot.png" width="400px">
 2、SpringBoot把配置文件全部砍掉了
+## 文件的上传&下载
+* 文件的上传
+```java
+    @RequestMapping("/upload")
+    public String upload(@RequestPart("file") MultipartFile file) throws FileNotFoundException {
+        //文件存储位置
+        String path = "D:\\code\\springBoot_learn\\springBoot_learn\\src\\main\\resources\\static\\files";
+        //按照上传日期进行分类
+        String dataDir = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        String dirPath = path+"\\"+dataDir;
+        File dir = new File(dirPath);
+        if (!dir.exists()) dir.mkdir();
+        //进行文件传输
+        try {
+            file.transferTo(new File(dirPath+"\\"+file.getOriginalFilename()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return "success";
+    }
+```
+```xml
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB //调整单个文件大小限制
+      max-request-size: 100MB //调整所有文件一起的大小限制
+```
+* 文件下载
+```java
+    @GetMapping("download")
+    public String download(HttpServletResponse response) throws IOException {
+        String path = "D:\\code\\springBoot_learn\\springBoot_learn\\src\\main\\resources\\static\\files\\2023-06-13";
 
+        response.setHeader("Content-Disposition","attachment;fileName=abc");
+        FileInputStream is = new FileInputStream("D:\\code\\springBoot_learn\\springBoot_learn\\src\\main\\resources\\static\\files\\2023-06-13\\.npmrc");
+        ServletOutputStream os = response.getOutputStream();
+
+        IOUtils.copy(is,os);
+        IOUtils.closeQuietly(is);
+        IOUtils.closeQuietly(os);
+
+        return "success";
+    }
+```
 ## Lombok
 简化JavaBean的开发
     * 使用
@@ -723,6 +769,11 @@ log.error("这是{}","{}占位符");//通过{}进行占位
 ```
 
 ## 注解
+* `@Value`
+```java
+@Value("${server.port}") //将配置文件中对应的值注入到URL字符串里面
+String URL;
+```
 * `@Configuration`
     * 出现的背景
     因为在SpringBoot中，没有了以前的`beans.xml`配置文件，那该如何向Spring中添加组件？
@@ -754,6 +805,24 @@ get请求：想要提取url后面的参数，通常使用`@RequestParam`
 post请求：想要将body中的json自动转化为一个java对象，使用`@RequestBody`;
 如果只想得到表单中的某一项的值，也可以使用`@RequestParam`
 如果想把body中的文件自动转化为一个multipart对象，使用`@RequestPart`
+> 注意：当使用`@RequestBody`时，发送给服务器的必须是一个json，即如果直接通过form表单进行提交，就不符合。在postman中就会报Unsupported Media Type错误。
+幸运的是，像axios发起post请求，它都会帮我们自动转化为json格式
+* `@SpringBootApplication`
+会自动扫描启动类所在的包下，的所有子包
+* `@ComponentScan`
+```java
+    package com.cd826dong.clouddemo.XXX.XX.application;
+    import …
+    @SpringBootApplication
+    // 这里我们通过@ComponentScan注解，将配置自动扫描的起始位置设置为com.cd826dong
+    @ComponentScan("com.cd826dong.＊＊")
+    @EntityScan(basePackageClasses=User.class)
+    public class Application {
+        public static void main(String[] args) throws Exception {
+            SpringApplication.run(Application.class, args);
+        }
+    }
+```
 ## web开发
 * 静态资源访问
 `localhost:8080/a.jpg`，对于`/a.jpg`的访问，springboot会先去匹配所有的controller，如果没有，就去一些目录下匹配静态资源。
@@ -789,3 +858,73 @@ form表单中的action可以随便跳转，但是ajax中的url是不能跨服务
 * SpringBoot如何解决跨域问题？
     * `@CrossOrigin`：放在controller的类上，表示该controller随便被访问
     * 全局解决：自己写配置类
+# SpringCloud
+## config
+* config有什么用？
+想要改一下数据库；原来的100个微服务在配置文件中写的数据库配置都要改，怎么办？
+* bootstrap.properties不生效
+`pom.xml`中添加
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-bootstrap</artifactId>
+  </dependency>
+```
+# SpringCloud Alibaba
+## Nacos
+* `error creating bean with name ‘configurationPropertiesBeans‘ defined in class path resource`
+SpringBoot版本与SpringCloudAlibaba版本不匹配
+对应关系:[link](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)
+<img src="./springcloud版本问题.png">
+1. 如果在SpringBoot项目中集成Nacos,或者其他SpringCloudAlibaba组件,就要根据SpringBoot的版本选择相应的SpringCloudAlibaba版本.否则就会出现莫名其妙的错误
+2. 如果在SpringBoot项目中集成LoadBalancer,或者其他SpringCloud组件,就要根据SpringBoot的版本选择相应的SpringCloud版本,否则也会出现一些莫名其面的错误
+* Springcloud与SpringBoot版本对应关系:[link](https://spring.io/projects/spring-cloud)
+* SpringcloudAlibaba与SpringBoot版本对应关系:[link](https://github.com/alibaba/spring-cloud-alibaba/wiki/%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E)
+```xml
+  <!--SpringBoot版本与cloud和Alibaba版本对应关系  -->
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.12</version>
+    <relativePath/> 
+  </parent>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <spring-cloud.version>2021.0.5</spring-cloud.version>
+    <spring-cloud-alibaba.version>2021.0.4.0</spring-cloud-alibaba.version>
+  </properties>
+  
+  <dependencyManagement >
+    <dependencies>
+      <dependency>
+        <groupId>com.alibaba.cloud</groupId>
+        <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+        <version>${spring-cloud-alibaba.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-dependencies</artifactId>
+        <version>${spring-cloud.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+```
+* Nacos集成负载均衡
+在新版本中的Nacos,已经把Ribbon给去除了;所以通过RestTemplate访问`http://服务名/person/1`时会报错:`"I/O error on GET request for \"http://service-9001/department/8\": service-9001; nested exception is java.net.UnknownHostException: service-9001`
+解决方法:自己引入下面的springcloud新版负责负载均衡的loadbalancer
+```xml
+    <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-loadbalancer</artifactId>
+    </dependency>
+```
+> Warning!
+微服务名称是不能有下划线`_`的,不然访问微服务时也会报错:`Request URI does not contain a valid hostname: http://service_9001/department/8`
+## seata
+* 在已有的nacos项目中使用seata
+`pom.xml`中只加一个`seata-spring-boot-starter`就行了！！

@@ -2122,6 +2122,55 @@ pageContext->request->session->application
 <img src="./tomcat连接器.png" width="700px">
 # Maven
 * [官网](https://mvnrepository.com/)
+* 父子继承关系
+要想让两个`pom.xml`成为父子：
+父pom中要添加`<module>`标签
+子pom中要添加`<parent>`标签
+## [Dependency Management](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#dependency-management)
+```xml
+<dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+```
+1、dependencyManagement通常写在parent pom.xml中，用来做版本管理
+2、声明在dependencyManagement中的依赖是不会加入该项目的
+3、声明dependencyManagement后，在声明dependencies，不需要加版本号了（无论是父项目还是子项目）
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+        <scope>test</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+<dependencies>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+    </dependency>
+</dependencies>
+```
+* 在DependencyManagement中，`<type>pom</type>`,`<scope>import</scope>`是什么鬼？
+springboot项目中，我已经有了parent标签，但我自己在根`pom.xml`中维护了一个`DependencyManagement`；我想使用根pom中的版本管理，怎么办？
+
 ## 命令行命令
 1、所有命令都是在`pom.xml`所在的目录下运行。
 2、compile、test、package、install，某个命令执行前，都会把前面的命令都执行了
