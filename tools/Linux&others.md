@@ -91,11 +91,19 @@ Changes to be committed:
 git log --oneline # 将提交记录显示为一行
 ```
 * 分支
+    * 查看分支：`git branch`
+    * 切换到feature1分支：`git switch feature1`
     * `git branch bugFix`:创建新的分支：bugFix
     * `git checkout bugFix`:切换到bugFix分支
     * `git checkout -b bugFix`:创建新的分支bugFix并切换到bugFix
     * `git merge newfeature`:将newfeature分支合并到当前所在的分支
     * `git branch --delete xx`:删除分支
+* `git merge`
+```bash
+git merge feature1  # 此时我站在master分支上：将feature1分支 merge into master 分支
+```
+如果没有冲突，则自动合并，如果有冲突，显示如图,需要手动解决
+<img src="./git/conflict.PNG">
 * `git diff`
     * git diff是比较工作区和暂存区之间的区别
     * git diff 怎么看？
@@ -175,6 +183,8 @@ git rm --cached -r --ignore-unmatch **/**/.mvn
     * 使用背景：由于种种原因，本地库和GitHub上的远程库已经不一样了
     * 详细使用
         * `git pull url/别名 分支`
+    * 我写自己的代码功能写完了，需要将远程库中的代码先合并到本地，最后在将所有的代码一起push，但我不想将远程库的代码下载后，我修改的部分消失了。我该怎么做？
+    先commit，在git pull
 ## 其他
 * 查看git安装在哪了：`where git`
 * `xxx.ignore`:通常为`git.ignore`
