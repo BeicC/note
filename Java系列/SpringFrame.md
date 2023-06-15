@@ -751,6 +751,9 @@ spring:
         return "success";
     }
 ```
+> Warning!
+如果表单提交的数据中有name、age和file，在controller中接收数据是不能写成下面这样的
+`@RequestBody Person person,@RequestPart("file") MultipartFile[] files`,只能分开去取数据：`@RequestParam("name") String name,@RequestParam("age") int age,@RequestPart("file") MultipartFile[] files`
 ## Lombok
 简化JavaBean的开发
     * 使用
