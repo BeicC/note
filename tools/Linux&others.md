@@ -63,6 +63,8 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 |Ctrl+Alt+↓|选中多行|
 * vscode逐个替换
 [link](https://blog.csdn.net/fantasyYXQ/article/details/125607352)
+* 代码自动对齐
+shift+alt+f
 # Markdown Preview Enhanced 
 * [link](https://blog.csdn.net/while0/article/details/124677531?spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=10)
 * esc：在vscode预览模式下显示目录
