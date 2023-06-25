@@ -318,6 +318,9 @@ springboot项目中，我已经有了parent标签，但我自己在根`pom.xml`�
 * Maven的高级之处：不在于它能自动导入Jar包，而在于它能自动导入Jar包所依赖的其他Jar包
 * Maven中配置文件导不出的问题 【狂神p11 21min46s】
 * Maven绑定Jar包的源代码:`mvn dependency:sources`
+    * 为什么`mvn dependency:sources`没有把源码下载下来？
+    `mvn dependency:sources`会强制把**当前目录**下的pom.xml中使用到的文件下载下来
+    请注意项目是否是嵌套结构：如果在project中有module，请在module同级目录下执行该命令
 * Maven工程中的java和resources目录下的文件，在打包的时候会被放到哪？
 java下的所有东西，编译后放到classes下（不包含java文件夹）
 resources下的所有文件，也是放到classes下（可能有意外，发生意外时需要在pom.xml中配置一下）
