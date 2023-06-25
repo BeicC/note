@@ -602,7 +602,8 @@ select @@tx_isolation # 查看事务的隔离级别
 * limit
 ```sql
 select * from user limit 2;//只看前两个
-select * from user limit 2,4//从结果下标为2的地方开始，往下4个；显示这些数据
+select * from user limit 2,4//从结果下标为2的地方开始，往下4个，即（2,3,4,5)；显示这些数据
+//mysql中第一个数据的下标为0；
 ```
 # 数据库的备份与恢复
 ## MySQLdump逻辑备份
