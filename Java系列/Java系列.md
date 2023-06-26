@@ -203,33 +203,6 @@ public interface MyInterface extends interfaceParent1,interfaceParent2 {
     public class Child extends Father { //报错，为什么？
     }
     ```
-    * 枚举类（enum）
-    ```java
-    enum Size{
-        SMALL,
-        MEDIUM,
-        LARGE;
-    }
-    等价于
-    public final class Size extends Enum<Size> {
-            public static final Size SMALL = new Size("SMALL",0);
-            public static final Size MEDIUM = new Size("MEDIUM",1);
-            public static final Size LARGE = new Size("LARGE",2);
-            private static Size[] VALUES = new Size[]{SMALL, MEDIUM, LARGE};
-            private Size(String name, int ordinal){
-                super(name, ordinal);
-            }
-            public static Size[] values(){ //编译器自己加的
-                Size[] values = new Size[VALUES.length];
-                System.arraycopy(VALUES, 0, values, 0, VALUES.length);
-                return values;
-            }
-            public static Size valueOf(String name){ //编译器自己加的
-                return Enum.valueOf(Size.class, name);
-            }
-        }
-    ```
-    
 * 多态
     * 什么是多态？父类的引用指向子类的对象，能不能调看父类，怎么调，看子类
     * 为什么要有多态？提高方法的通用性、减少方法的重载【p281】| 通过多态，将规范和实现直接分开 `void doData(Connection conn)`
@@ -1057,6 +1030,44 @@ System.out.println(classClass);
 ## 日志
 * 为什么需要日志？
 
+## 类的扩展
+### 枚举类（enum）
+* 枚举类的前身
+```java
+    class Size {
+        public static final int SMALL = 0;
+        public static final int MEDIUM = 1;
+        public static final int LARGE = 2;
+    }
+``` 
+* 为什么使用枚举类？
+
+```java
+enum Size{
+    SMALL,
+    MEDIUM,
+    LARGE;
+}
+等价于
+public final class Size extends Enum<Size> {
+        public static final Size SMALL = new Size("SMALL",0);
+        public static final Size MEDIUM = new Size("MEDIUM",1);
+        public static final Size LARGE = new Size("LARGE",2);
+        private static Size[] VALUES = new Size[]{SMALL, MEDIUM, LARGE};
+        private Size(String name, int ordinal){
+            super(name, ordinal);
+        }
+        public static Size[] values(){ //编译器自己加的
+            Size[] values = new Size[VALUES.length];
+            System.arraycopy(VALUES, 0, values, 0, VALUES.length);
+            return values;
+        }
+        public static Size valueOf(String name){ //编译器自己加的
+            return Enum.valueOf(Size.class, name);
+        }
+    }
+```
+
 ## jdk新特性
 * Lambda表达式（一种语法）
     * Lambad出现的背景
@@ -1081,6 +1092,29 @@ System.out.println(classClass);
 * 函数式接口
     * `@FunctionalInterface`
     验证该接口是否符合函数式接口的要求
+* Lambda表达式的日常使用
+一个函数，可以接收一个变量
+也可以接收一个方法（方法提供一套执行逻辑，数据由对象自己提供：如list.foreach()）
+如果一个方法需要接收方法作为参数，一般通过接口实现
+当传递参数的时候，有以下写法
+```java
+//1
+list.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+
+            }
+        });
+//2 Lambda表达式
+list.forEach(curString->{
+    System.out.println(curString);
+});
+//3 Lambda表达式进阶：方法引用
+list.forEach(System.out::println);
+```
+* 理解方法引用
+使用方法引用的时候，说明该参数需要一个函数
+而函数我只关心参数和函数体
 # 并发/异步编程
 ## synchronized
 * 同步方法中的锁对象是谁？
