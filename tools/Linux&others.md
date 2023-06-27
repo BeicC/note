@@ -1,3 +1,6 @@
+# VMware
+## 参考
+* [blog](https://www.ssymon.com/archives/vmware-download-key)
 # Linux
 * man
     * 背景
