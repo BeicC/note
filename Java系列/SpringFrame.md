@@ -697,6 +697,49 @@ public class ExceptionHandler {
 
 
 # SpringBoot
+* springBoot启用拦截器
+addInterceptors用来往spring容器中添加拦截器
+```java
+@Configuration
+public class MyMvcConfig implements WebMvcConfigurer {
+
+    @Resource
+    private TokenHandlerInterceptor tokenHandlerInterceptor;
+
+    /**
+     * 拦截器
+     *
+     * @param registry 拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 需要配置,告知拦截器：/static/**下的静态资源不需要拦截
+        registry
+                .addInterceptor(tokenHandlerInterceptor)
+                .excludePathPatterns("/", "/user/login", "/mxmeal/swagger-ui.html", "/swagger-resources/**", "/webjars/**",
+                        "/v2/**", "/swagger-ui.html/**")
+                .addPathPatterns("/**");
+
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowCredentials(true)
+                .allowedMethods("GET", "POST", "DELETE", "PUT")
+                .maxAge(3600);
+    }
+}
+```
 * 为什么SpringBoot项目刚启动就结束？
 添加web依赖
 * SpringBoot的好处
