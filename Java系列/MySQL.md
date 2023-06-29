@@ -1,4 +1,6 @@
 # Mysql基础操作
+## 将MySQL中的表复制到word中
+* 参考：[link](https://blog.csdn.net/m0_48795024/article/details/124109024)
 * mysql登录命令
 ```sql
 mysql -h -u -p
