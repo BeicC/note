@@ -724,6 +724,8 @@ public class A{
 * Random
     * 构造器Random(seed):如果seed一样，随机出来的数也一样，所以一般这样用`new Random(System.currentTimeMillis());`
     * random.nextInt(4):从0~3中随机取一值
+### Java字符串占位符
+* 参考：[CSDN](https://blog.csdn.net/weixin_41919486/article/details/122521836)
 ### Arrays
 * `Arrays.sort()`
     * 基本数据类型，默认从小到大
@@ -2183,4 +2185,5 @@ pageContext->request->session->application
 * JWT的优点
 1、由服务器生成，但只传给前端，不保存在自己的内存里（解决内存占用问题）
 2、当服务器生成JWT时，会把一些信息编码进JWT中，这样每次服务器拿到一个JWT，就可以根据相应的算法把信息就解码出来；这样一来，以前保存在session中的信息都可以编码进JWT中（解决分布式问题）
+3、JWT不能解决上述session的安全问题，如果JWT被截获盗用，仍然可以访问账户
 * JWT一般放在response请求header中
