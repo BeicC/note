@@ -349,3 +349,30 @@ resources下的所有文件，也是放到classes下（可能有意外，发生�
     </build>
 ```
 # Swagger
+## Swagger注解
+* `@Api(tags = "晚餐管理1")`
+放在controller类上，tags里面的内容显示在下图
+<img src="./swagger/%40api.png">
+* `@ApiOperation("新增")`
+放在方法上，里面的内容显示在下图
+<img src="./swagger/%40apioperation.png">
+* `ApiImplicitParams`
+```java
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userName", value = "用户名", dataType = "String", required = true),
+            @ApiImplicitParam(name = "password", value = "密码", dataType = "String", required = true)
+    })
+```
+放在方法上
+<img src="./swagger/%40aipparam.png">
+* RESTful传参
+<img src="./swagger/path.png">
+想要为responseBody添加description
+```java
+    public ResponseResult<String> insert(@ApiParam(name = "dinner",value = "晚餐实体类") @RequestBody Dinner dinner){
+
+        dinnerService.insert(dinner);
+        int a = 1/0;
+        return ResponseResult.SUCCESS("success");
+    }
+```
