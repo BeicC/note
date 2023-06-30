@@ -53,6 +53,8 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 * 选中当前单词：ctrl+w
 * 在当前行上面加一行：ctrl+alt+enter；在当前行下面加一行：shift+enter
 * try-catch快捷键：选中代码，ctrl+alt+t
+* idea中代码模板的使用
+参考：[link](https://zhuanlan.zhihu.com/p/615874498)
 # VScode
 |快捷键|作用|
 |-|-|

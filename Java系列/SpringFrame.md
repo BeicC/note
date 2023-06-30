@@ -815,6 +815,10 @@ log.error("这是{}","{}占位符");//通过{}进行占位
 ```
 
 ## 注解
+* 前端字符串"2023-06-12"如果在controller中转化为LocalDate?
+```java
+@RequestParam("inputDate")@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate inputDate
+```
 * `@Value`
 ```java
 @Value("${server.port}") //将配置文件中对应的值注入到URL字符串里面
