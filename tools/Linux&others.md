@@ -2,6 +2,8 @@
 ## 参考
 * [blog](https://www.ssymon.com/archives/vmware-download-key)
 # Linux
+## Linux中的目录
+* /usr(UNIX software Resource)
 * man
     * 背景
     Linux里面有很多命令，如何了解一个命令该怎么使用？
@@ -45,6 +47,26 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
     如果同时操作多台服务器的话，在cmd中使用ssh就不太方便了；每次都要登录，退出。
     * 为什么需要xftp这种软件？
     如果涉及本电脑与服务器之间的文件传输，当然自己可以通过cmd通过ssh连接服务器，在通过scp命令进行文件传输。但是通过xftp，文件的传输只需要简单的拖拽
+* ps
+    * `ps -A`同`ps -e`：查看所有后台正在运行的进程
+    * `ps -p 2034`：查看process 2034的详细信息
+* apt
+    * `Failed to fetch http://security.ubuntu.com/ubuntu/pool/main/e/eglibc/libc-bin_2.15-0ubuntu10.6_i386.deb 404 Not Found [IP: 91.189.91.14 80] `
+    先`sudo apt-get update`，在使用下载命令`sudo apt install gcc`
+* tar
+    * `tar -xzvf xxx.tar.gz`中的`-xzvf`选项都是什么意思？
+    ```text
+    -x：表示解压缩，也称为提取（extract），用于解压缩 tar 文件或从 tar 文件中提取文件。
+    -z：表示使用 gzip 压缩算法。tar 命令通常用于处理 tar.gz 或 .tgz 文件，使用 -z 选项可以自动处理 gzip 压缩的文件。
+    -v：表示 verbose，即详细模式。使用此选项会输出详细的操作信息，显示正在提取的文件列表和解压缩进度等。
+    -f：表示文件，用于指定要操作的 tar 文件的路径。需要注意的是，-f 选项后面必须紧跟要操作的 tar 文件的名称。
+    
+    所以-xzvf的意思是
+     xxx.tar.gz文件(-f)进行解压缩(-x)
+     使用 gzip 压缩算法(-z)
+     同时在操作过程中显示详细的操作信息(-v)
+    ```
+* 查看ip地址：`ip addr show`看inet后面的值
 * gcc
     * `gcc --help`
 # Idea
@@ -73,6 +95,9 @@ shift+alt+f
 # Markdown Preview Enhanced 
 * [link](https://blog.csdn.net/while0/article/details/124677531?spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=10)
 * esc：在vscode预览模式下显示目录
+# Svn
+* 将svn服务器中的代码下载到本地
+这一步叫做checkout，右键-Subversion checkout就行了
 
 # Git
 some questions
@@ -378,3 +403,7 @@ resources下的所有文件，也是放到classes下（可能有意外，发生�
         return ResponseResult.SUCCESS("success");
     }
 ```
+
+# fiddler
+* 用途：用来查看http报文
+* 使用:[知乎参考](https://www.zhihu.com/question/55617707/answer/2690009021)
