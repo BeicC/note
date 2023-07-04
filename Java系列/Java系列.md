@@ -107,6 +107,19 @@ public static void main(String[] args) {
     Object obj = new Object();
     String str = (String) obj
     ```
+    * Java中的类型转换
+    ```java
+    //1、向上转换
+    Person p = new Person();
+    Object obj = (Object) p;
+    //2、向下转换
+    Object obj = new Object();
+    Person p = (Person) obj;
+
+    //这两种都能通过编译，但是第二种在运行时会报错；
+    //从内存中很好理解：向上转换，其实内存中的对象所含的数据是“够的”
+    //                向下转换，内存中对象所含的数据是“不够的”
+    ```
 * 关于注释：
     * 单行注释：//
     * 多行注释：/*   */
