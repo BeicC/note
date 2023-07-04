@@ -95,10 +95,12 @@ shift+alt+f
 # Markdown Preview Enhanced 
 * [link](https://blog.csdn.net/while0/article/details/124677531?spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=10)
 * esc：在vscode预览模式下显示目录
-# Svn
+# SVN
 * 将svn服务器中的代码下载到本地
 这一步叫做checkout，右键-Subversion checkout就行了
-
+* SVN与Git之间的区别
+1、分支功能：SVN中的分支功能，实际上就是在SVN服务器上将工作文件夹复制一份，然后在从中央服务器上checkout下来；而Git就比较神奇，代码直接在当前目录下进行切换
+2、版本库：SVN只有一个版本库，位于svn服务器上，无论是update还是commit，实际上都在和服务器打交道；而Git在本地就有一个自己的版本库，在进行commit时，是不会牵扯到远程服务器的。只有在pull或者push的时候，才和远程服务器打交道
 # Git
 some questions
 > 1、为什么git bash可以git clone，但cmd git clone却会failed？
