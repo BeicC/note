@@ -34,6 +34,35 @@
         writer.flush();
     }
 ```
+# JDK
+## enhanced for statement
+* 语法
+```java
+for (V : Ex){
+    //some statement
+}
+```
+`:`右边有两种可能：
+1、Ex是一个对象，该对象implements Iterable 
+2、Ex是一个数组
+如果Ex是一个对象，那么增强for循环会被翻译为如下形式的普通for循环
+```java
+for (I #i = Expression.iterator(); #i.hasNext(); ) {
+    {VariableModifier} TargetType Identifier =
+        (TargetType) #i.next();
+    Statement
+}
+```
+如果Ex是一个数组，那么增强for循环会被翻译为如下形式的普通for循环
+```java
+for (int #i = 0; #i < #a.length; #i++) {
+    {VariableModifier} TargetType Identifier = #a[#i];
+    Statement
+}
+```
+### 参考资料
+* [jdk文档](https://docs.oracle.com/javase/specs/jls/se8/html/jls-14.html#jls-14.14.2)
+* [StackOverflow](https://stackoverflow.com/questions/85190/how-does-the-java-for-each-loop-work)
 # Java基础
 * 什么是devops？[link](https://www.ruanyifeng.com/blog/2023/03/platform-engineering.html)
 *  与内存相关

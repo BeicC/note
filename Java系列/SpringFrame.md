@@ -697,6 +697,11 @@ public class ExceptionHandler {
 
 
 # SpringBoot
+## 整合日志
+* `@Slf4j`的作用：就可以直接使用log了
+* 配置文件中的日志选项
+```xml
+```
 * springBoot启用拦截器
 addInterceptors用来往spring容器中添加拦截器
 ```java
