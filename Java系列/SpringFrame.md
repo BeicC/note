@@ -913,6 +913,24 @@ form表单中的action可以随便跳转，但是ajax中的url是不能跨服务
 * SpringBoot如何解决跨域问题？
     * `@CrossOrigin`：放在controller的类上，表示该controller随便被访问
     * 全局解决：自己写配置类
+## Validation
+### 参考
+* [daeldung](https://www.baeldung.com/spring-boot-bean-validation)(非常推荐)
+```java
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    //@ResponseSattus的作用是：把response报文中的状态改为400，如果不加则为200
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+```
 # SpringCloud
 ## config
 * config有什么用？

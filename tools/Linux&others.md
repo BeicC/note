@@ -378,6 +378,8 @@ resources下的所有文件，也是放到classes下（可能有意外，发生�
     </build>
 ```
 # Swagger
+## 参考
+* [baeldung](https://www.baeldung.com/swagger-2-documentation-for-spring-rest-api)(推荐)
 ## Swagger注解
 * `@Api(tags = "晚餐管理1")`
 放在controller类上，tags里面的内容显示在下图
