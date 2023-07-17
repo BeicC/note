@@ -35,6 +35,37 @@
     }
 ```
 # JDK
+## switch
+> 如果 case 语句块中没有 break 语句时，匹配成功后，从当前 case 开始，后续所有 case 的值都会输出。
+```java
+switch (i){
+                case 0:
+                    cell.setCellValue("所在部门");
+                    break;
+                case 1:
+                    cell.setCellValue("员工姓名");
+                    break;
+                case 2:
+                    cell.setCellValue("食堂选择");
+                    break;
+                case 3:
+                    cell.setCellValue("就餐人数");
+                    break;
+                case 4:
+                    cell.setCellValue("就餐金额");
+                    break;
+                case 5:
+                    cell.setCellValue("就餐人员");
+                    break;
+                case 6:
+                    cell.setCellValue("填报日期");
+                    break;
+                case 7:
+                    cell.setCellValue("附件");
+                    break;
+            }
+```
+
 ## enhanced for statement
 * 语法
 ```java
