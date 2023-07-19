@@ -116,6 +116,53 @@ public static void main(String[] args) {
 * 语法
     * 继承的一个应用：代码复用 尚硅谷p228
     * 注解（Annotation）
+## ClassLoader
+### getSystemResource() method
+#### 参考资料
+1. [herongyang](https://www.herongyang.com/JVM/ClassLoader-getSystemResource-Method-Find-File.html)
+2. [What's the default classpath when not specifying classpath?](https://stackoverflow.com/questions/8227682/whats-the-default-classpath-when-not-specifying-classpath)
+#### 分析
+如果代码中调用了`ClassLoader.getSystemResource('a.txt')`：
+那么代码会将加载资源的任务交给当前类的加载器,让该类的加载器去加载资源getResources
+```java
+    public static URL getSystemResource(String name) {
+        ClassLoader system = getSystemClassLoader(); //appClassLoader
+        if (system == null) {
+            return getBootstrapResource(name);
+        }
+        return system.getResource(name);
+    }
+```
+类-加载器(app-classloader)也不想干这个活，他会把这个任务往上抛，扔给自己的父-加载器(ext-classloader)
+```java
+    public URL getResource(String name) {
+        URL url;
+        if (parent != null) {
+            url = parent.getResource(name);
+        } else {
+            url = getBootstrapResource(name);
+        }
+        if (url == null) {
+            url = findResource(name);
+        }
+        return url;
+    }
+```
+所以最终，调用的是下面的方法
+```java
+    //Find resources from the VM's built-in classloader
+    private static URL getBootstrapResource(String name) {
+        URLClassPath ucp = getBootstrapClassPath();
+        Resource res = ucp.getResource(name);
+        return res != null ? res.getURL() : null;
+    }
+```
+VM's built-in classloader(bootstrap-classloader)会去**一些**目录下去找这个资源，这些目录其中之一就是default classpath
+根据参考资料2，default classpath就是classes目录下,**不包含子目录！**
+因为无论是自己启动jvm还是idea帮你启动，启动目录都是classes，而`The default value of the class path is "."`
+
+如果想从其他目录中加载资源，就如参考资料1中所说:
+> If I want the JVM to load the logo.jpg file and the Hello.class from MyZIP.zip file, I need to use "-classpath" option to tell the JVM to search in MyZIP.zip first:
 ## Jar
 * 编译时将源文件与classes分开(当前在src目录，要去新建classess目录):`javac -d ../classes Hello.java`
 * 打jar包
