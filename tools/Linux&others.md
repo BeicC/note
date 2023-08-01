@@ -1,6 +1,7 @@
 # VMware
 ## 参考
-* [blog](https://www.ssymon.com/archives/vmware-download-key)
+* [VMware下载和破解](https://www.ssymon.com/archives/vmware-download-key)
+* [自适应屏幕](https://www.cnblogs.com/jie-fang/p/10270232.html)
 # Linux
 ## Linux中的目录
 * /usr(UNIX software Resource)
@@ -237,6 +238,31 @@ $ git config --global user.email 527609724@qq.com
     * `git branch -a`：查看所有分支
     * ``
 # VIM
+## vimtutor
+### lesson 1
+* x删除
+* i在cursor上直接添加
+* A直接在行尾添加
+### lesson 2
+* dw删除单词
+* d$删除当前cursor到行尾所有
+* d(motion):
+dw(delete word)
+de(delete end of word)
+d$(delete end of line)
+* 数字+立即生效动作：将这个动作重复多次
+2w：移动2次word
+2e:执行2次，end of word
+0：move to the start of the line
+* 编辑动作+数字+移动动作
+d2w:执行2次，dw
+* dd
+删除一行
+2dd：删除两行
+为什么不是dd2？因为当输入dd的时候，这个命令会立即生效，所以想要重复，需要把数组放在前面
+* u&U
+u:undo
+U:undo the whole line
 ## 移动
 * 怎么快速回到文档首部：gg
 ## 插入
