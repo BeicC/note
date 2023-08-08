@@ -96,18 +96,19 @@ shift+alt+f
 # Markdown Preview Enhanced 
 * [link](https://blog.csdn.net/while0/article/details/124677531?spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=10)
 * esc：在vscode预览模式下显示目录
-# SVN
-* 将svn服务器中的代码下载到本地
+# 6、SVN
+## 6.1 将svn服务器中的代码下载到本地
 这一步叫做checkout，右键-Subversion checkout就行了
 > 注意：如果右键-tortoise SVN-export，这种方式下载的文件是没有.svn文件夹的
-* SVN与Git之间的区别
+## 6.2 SVN与Git之间的区别
 1、分支功能：SVN中的分支功能，实际上就是在SVN服务器上将工作文件夹复制一份，然后在从中央服务器上checkout下来；而Git就比较神奇，代码直接在当前目录下进行切换
 2、版本库：SVN只有一个版本库，位于svn服务器上，无论是update还是commit，实际上都在和服务器打交道；而Git在本地就有一个自己的版本库，在进行commit时，是不会牵扯到远程服务器的。只有在pull或者push的时候，才和远程服务器打交道
-* idea中启用svn
+## 6.3 idea中启用svn
+* 参考:[link](https://blog.csdn.net/weixin_48131807/article/details/123921488?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-123921488-blog-130825607.235%5Ev38%5Epc_relevant_sort&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-6-123921488-blog-130825607.235%5Ev38%5Epc_relevant_sort&utm_relevant_index=10)
 s(situation)：项目文件夹内已经有了.svn，但是idea没有识别，导致不能通过idea来提交or更新代码
 t(task):肯定需要通过idea来进行一些配置
 a(action): idea-VCS-enable version control Integration
-# Git
+# 7、Git
 some questions
 > 1、为什么git bash可以git clone，但cmd git clone却会failed？
 ## 本地
