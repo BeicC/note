@@ -99,9 +99,14 @@ shift+alt+f
 # SVN
 * 将svn服务器中的代码下载到本地
 这一步叫做checkout，右键-Subversion checkout就行了
+> 注意：如果右键-tortoise SVN-export，这种方式下载的文件是没有.svn文件夹的
 * SVN与Git之间的区别
 1、分支功能：SVN中的分支功能，实际上就是在SVN服务器上将工作文件夹复制一份，然后在从中央服务器上checkout下来；而Git就比较神奇，代码直接在当前目录下进行切换
 2、版本库：SVN只有一个版本库，位于svn服务器上，无论是update还是commit，实际上都在和服务器打交道；而Git在本地就有一个自己的版本库，在进行commit时，是不会牵扯到远程服务器的。只有在pull或者push的时候，才和远程服务器打交道
+* idea中启用svn
+s(situation)：项目文件夹内已经有了.svn，但是idea没有识别，导致不能通过idea来提交or更新代码
+t(task):肯定需要通过idea来进行一些配置
+a(action): idea-VCS-enable version control Integration
 # Git
 some questions
 > 1、为什么git bash可以git clone，但cmd git clone却会failed？
@@ -263,6 +268,15 @@ d2w:执行2次，dw
 * u&U
 u:undo
 U:undo the whole line
+### lesson 3
+* p
+将刚才删除的内容粘贴到cursor的下一行
+* r'x'
+将光标中的内容替换为'x'
+* ce(change end of word)
+将cursor上的字符一直到单词尾部删除，并进入插入模式
+cc：将一整行删除，并进入插入模式
+
 ## 移动
 * 怎么快速回到文档首部：gg
 ## 插入
