@@ -697,6 +697,29 @@ public class ExceptionHandler {
 
 
 # SpringBoot
+## 异常处理器
+* 什么时候使用自定义异常处理器
+在自己的MVC代码中，通常都需要在controller中加入很多的try-catch来进行异常处理。
+但是这样代码就会显得会臃肿
+* 怎么做
+```java
+//直接在exception包下新建该类
+@RestControllerAdvice  //加上该注解，springboot在启动的时候会把这个类加入到容器中
+@Slf4j
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(value = MyException.class) //通过ExceptionHandler注解来表明此方法用来处理哪种类型的注解
+    public ResponseResult<String> myExceptionHandler(HttpServletRequest request, MyException e) {
+        logError(request, e);
+        return ResponseResult.SYSTEMERROR(e.getMessage(), null);
+    }
+
+}
+```
+* 原理：
+如果业务代码出现异常，controller直接将异常对外抛
+在dispatcherServlet中就会捕获该异常
+经过一些操作后，进入@ExceptionHandler下的方法进行异常处理
 ## 整合日志
 * `@Slf4j`的作用：就可以直接使用log了
 * 配置文件中的日志选项

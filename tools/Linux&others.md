@@ -3,52 +3,144 @@
 * [VMware下载和破解](https://www.ssymon.com/archives/vmware-download-key)
 * [自适应屏幕](https://www.cnblogs.com/jie-fang/p/10270232.html)
 # Linux
-## Linux中的目录
+## 1.Linux中的目录
 * /usr(UNIX software Resource)
-* man
-    * 背景
-    Linux里面有很多命令，如何了解一个命令该怎么使用？
-    * 分类
-    Linux将各种命令分为了9类，分别为：
-    1、常见命令的说明
-    2、可调用的系统
-    3、函数库
-    4、设备文件
-    5、文件格式
-    6、游戏说明
-    7、杂项·
-    8、系统管理员可用的命令
-    9、与内核相关的说明
-    查看reboot命令在哪个分类下：`man -f reboot`；
-    然后就可以使用`man 2 reboot`查看系统调用的reboot；
-    使用`man 8 reboot`查看系统管理中的reboot
-* `ll`是什么
+## man
+* 背景
+Linux里面有很多命令，如何了解一个命令该怎么使用？
+* 在man里通过`/keyword`进行查找
+按n跳到下一个匹配项
+按N跳到上一个匹配项
+* `-k`
+```bash
+$ man -k single_keyword | less # 通过-k在man手册里根据关键词查找
+```
+* 分类
+Linux将各种命令分为了9类，分别为：
+1、常见命令的说明
+2、可调用的系统
+3、函数库
+4、设备文件
+5、文件格式
+6、游戏说明
+7、杂项·
+8、系统管理员可用的命令
+9、与内核相关的说明
+查看reboot命令在哪个分类下：`man -f reboot`；
+然后就可以使用`man 2 reboot`查看系统调用的reboot；
+使用`man 8 reboot`查看系统管理中的reboot
+## `ll`是什么
 `ll`是`ls -alF'`的别名（alias），可在Linux输入`type ll`查看；
 也可通过`alias`命令查看有哪些别名
-* `cp`:(copy)
+## `cp`:(copy)
 ```sh
 cp a.txt /dev/a.txt # 将当前目录下的a.txt复制到dev目录下的a.txt
 cp -r test1 test2 # 想要复制目录，需要加上-r
 ```
-* `mv`(move)
+## `mv`(move)
 ```sh
 mv a.txt /mnt/ # 会把当前目录中的a.txt移动到/mnt目录下；当前目录就没有a.txt了
 mv a.txt a.doc # 把a.txt文件改名为a.doc
 ```
-* `rm`:(remove)
+## `rm`:(remove)
 ```sh
 rm a.txt # 删除a.txt文件
 rm -r dir/ # 使用rm命令删除一个文件夹
 rmdir dir/ # rmdir命令只能删除空文件夹
 rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 ```
-* ssh
-    * 通过windows远程连接：`ssh ubuntu@192.168.222.3`
-    * 为什么需要xshell这种软件？
-    如果同时操作多台服务器的话，在cmd中使用ssh就不太方便了；每次都要登录，退出。
-    * 为什么需要xftp这种软件？
-    如果涉及本电脑与服务器之间的文件传输，当然自己可以通过cmd通过ssh连接服务器，在通过scp命令进行文件传输。但是通过xftp，文件的传输只需要简单的拖拽
-* ps
+## terminal
+* <ctrl> + a will move the cursor to the beginning of the current line (helpful for fixing mistakes)
+* <ctrl> + e will move the cursor to the end of the current line (helpful for fixing mistakes)
+* <ctrl> + r will let you search through your recently used commands
+# Virtual Box
+## 1.网络
+* situation：
+我在virtual Box中创建了一台虚拟机，它默认网络是NAT模式。我想在本地通过ssh连接虚拟机，但是连接不上
+通过在虚拟机里`ip addr`，我发现虚拟机的ip地址为`10.x.x.x`,而且在虚拟机里ping主机(virtual box虚拟网卡的ip地址)，是可以ping通的；但是在主机里ping虚拟机不行
+* task：
+需要搞清楚virtualBox中的NAT到底是个什么模式
+* analysis：
+通过[virtual Box的官方文档](https://www.virtualbox.org/manual/ch06.html#network_nat)，可以得知NAT模式如下图：
+<img src= "./image/virutal_box_nat.png">
+NAT模式的优点:
+虚拟机不需要配置，可以直接上网(上网数据包通过虚拟路由器转发给了主机)
+NAT模式的缺点：
+多个虚拟机之间不能通信；主机不能与虚拟机通信
+每种网络连接方式的优缺点见：[Table 6.1. Overview of Networking Modes](https://www.virtualbox.org/manual/ch06.html#network_nat)
+
+* action
+方法1:见[官方文档](https://www.virtualbox.org/manual/ch06.html#natforward)中的端口转发
+<img src="./image/nat_1.png">
+配置NAT网卡中的端口转发：
+Rule1的意思是：任何访问127.0.0.1(本主机)22端口中的请求，都会转发给虚拟机(10.0.2.15)中的22端口
+（10.0.2.15替换虚拟机的ip地址：可在虚拟机terminal中输入ip addr得到）
+<img src="./image/nat_2.png">
+只要确保虚拟机中的ssh server开启了，我们就可以在本地输入以下命令进行ssh连接
+```bash
+ssh beichen@127.0.0.1
+```
+方法二：配置双网卡
+
+# 配置新Linux
+* 更新源和升级软件
+```bash
+sudo apt update # 更新源
+sudo apt upgrade # 更新软件
+```
+* 创建新用户
+```bash
+adduser beichen # /home中的文件夹，其中一个文件夹代表一个用户
+```
+* 给beichen`sudo`的权限
+```bash
+usermod -aG sudo beichen
+id beichen # 查看用户是否具有sudo权限
+```
+* Linux中用户之间的切换
+```bash
+su # 切换到root用户
+su beichen # 切换到beichen用户
+```
+* 修改某一程序的配置文件后，需要重启该程序
+```bash
+sudo systemctl reload sshd
+```
+* 修改某一文件夹的主人
+```bash
+sudo chown -R beichen:beichen /home/beichen2
+# chown:change owner
+# -R: 所有文件(Recursively)
+# beichen:beichen  user:group
+```
+# ssh
+## 1.是什么
+* ssh是一个协议(protocol),和HTTP，FTP类似
+* 一般来说，我们都是使用ssh进行远程连接
+* 想要使用ssh从local(本地电脑)连接到server(远程电脑)，需要两个配套的软件(这两个软件实现了ssh协议)：local端安装了ssh client，server端安装了ssh server
+> 这里的ssh server是一个抽象的说法：如ubuntu中ssh server实现之一是：openssh-server.所以在ubuntu中，只需要`sudo apt-get install openssh-server`就可以安装好这个软件
+## 2.登录(login)的几种方法
+* `ssh beichen@192.168.52.1`
+直接输入192.168.52.1服务器中beichen用户的密码
+* 使用public/private key进行登录
+最终的结果就是在命令行中输入：`ssh beichen@192.168.52.1`
+就会直接登录，不需要输入密码（当然，想实现这种效果，需要进行一些配置）
+* 配置公钥&私钥实现ssh免密登录
+1. local端：输入`ssh-keygen`
+结果：如果所有信息保持默认(default),会在`~/.ssh/`文件夹下新增两个文件：`id_rsa`（私钥）`id_rsa.pub`（公钥）
+2. 通过一些方法将`id_rsa.pub`（公钥）文件放到服务器中.ssh的authorized_keys文件下
+可以使用scp命令(基于ssh的copy)：`scp ~/.ssh/id_rsa.pub beichen@192.168.52.1:~`
+## 3.让一台local通过ssh免密登录多台server
+1. 在创建key的时候，要取名
+2. 需要将文件名非id_rsa的private key通过ssh-add命令加入Identity List
+## 4.参考
+* https://www.youtube.com/watch?v=hQWRp-FdTpc&t=24s
+* 通过windows远程连接：`ssh ubuntu@192.168.222.3`
+* 为什么需要xshell这种软件？
+如果同时操作多台服务器的话，在cmd中使用ssh就不太方便了；每次都要登录，退出。
+* 为什么需要xftp这种软件？
+如果涉及本电脑与服务器之间的文件传输，当然自己可以通过cmd通过ssh连接服务器，在通过scp命令进行文件传输。但是通过xftp，文件的传输只需要简单的拖拽
+# ps
     * `ps -A`同`ps -e`：查看所有后台正在运行的进程
     * `ps -p 2034`：查看process 2034的详细信息
 * apt
@@ -244,6 +336,9 @@ $ git config --global user.email 527609724@qq.com
     * `git branch -a`：查看所有分支
     * ``
 # VIM
+## 使用
+* \<escape>/cats	Searches your file for the nearest occurrence of the string “cats”. Press n to go to the next occurrence or N to go to the previous
+* \<escape>:set nu	Shows line numbers within your file
 ## vimtutor
 ### lesson 1
 * x删除
