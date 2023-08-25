@@ -520,9 +520,11 @@ resources下的所有文件，也是放到classes下（可能有意外，发生�
 * `@Api(tags = "晚餐管理1")`
 放在controller类上，tags里面的内容显示在下图
 <img src="./swagger/%40api.png">
+
 * `@ApiOperation("新增")`
 放在方法上，里面的内容显示在下图
 <img src="./swagger/%40apioperation.png">
+
 * `ApiImplicitParams`
 ```java
     @ApiImplicitParams({
@@ -532,8 +534,10 @@ resources下的所有文件，也是放到classes下（可能有意外，发生�
 ```
 放在方法上
 <img src="./swagger/%40aipparam.png">
+
 * RESTful传参
 <img src="./swagger/path.png">
+
 想要为responseBody添加description
 ```java
     public ResponseResult<String> insert(@ApiParam(name = "dinner",value = "晚餐实体类") @RequestBody Dinner dinner){
@@ -544,6 +548,13 @@ resources下的所有文件，也是放到classes下（可能有意外，发生�
     }
 ```
 
+# batch script
+## 参考
+* [wikihow](https://www.wikihow.com/Write-a-Batch-File)
+* [windows reference](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands#r)
+## 命令
+* `@ECHO OFF`
+一个文件加上`@ECHO OFF`,另一个文件不加，运行看结果
 # fiddler
 * 用途：用来查看http报文
 * 使用:[知乎参考](https://www.zhihu.com/question/55617707/answer/2690009021)
