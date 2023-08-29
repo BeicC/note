@@ -335,10 +335,13 @@ $ git config --global user.email 527609724@qq.com
 * 分支
     * `git branch -a`：查看所有分支
     * ``
+# GDB
+## 参考
+* [cs61C gbd card](https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/gdb5-refcard.pdf)
+* [如何显示所有局部变量、全局及静态变量、方法中的参数？](https://stackoverflow.com/questions/6261392/printing-all-global-variables-local-variables)
 # VIM
-## 使用
-* \<escape>/cats	Searches your file for the nearest occurrence of the string “cats”. Press n to go to the next occurrence or N to go to the previous
-* \<escape>:set nu	Shows line numbers within your file
+## reference
+* [nju PA](https://nju-projectn.github.io/ics-pa-gitbook/ics2020/0.4.html)
 ## vimtutor
 ### lesson 1
 * x删除
@@ -372,16 +375,46 @@ U:undo the whole line
 * ce(change end of word)
 将cursor上的字符一直到单词尾部删除，并进入插入模式
 cc：将一整行删除，并进入插入模式
+### lesson 4
+* 移动
+CTRL+g 展示当前行数以及文件信息
+G 移动到文件最底行
+gg 移动到文件第一行
+356+G 跳转到第365行（356,GO！）
+* 查找
+/abc 查找abc(从前往后找)
+n 查找下一个；N 查找上一个
+?abc 查找abc(从后往前找)
+CTRL+o
+CTRL+i
+* %
+将光标放到左括号上，type%，光标会自动移动到与他匹配的右括号上
+* 替换
+`:s/going/rolling`：当前行的第一个
+`:s/going/rolling/g`:当前行的全部
+`570,573s/going/rolling/g`:在570行到573行执行替换
+`%s/going/rolling/g`:全部文件，自动替换
+`%s/going/rolling/gc`:全部文件,但在替换的时候会prompt提醒，是否替换
+### lesson 5
+* 在vim中执行外部命令
+:! ls 相当于直接ls
+* 操作vim当前打开的文件
+:w TEST 将当前vim打开的文件另存为TEST
+* 复制部分行到TEST文件
+v 进入visual模式
+选中想要的行(会高亮)
+然会以此按`:`,`w`.最终屏幕上显示的是`:<,> w`
+* 将外面的文件直接插入进来
+:r TEST
+:r !ls #将ls命令的output直接插入进来
+### lesson 6
+* 设置
+:set nu	Shows line numbers within your file
+:set ic (ignore case)在查找的时候忽略大小写
+:set incsearch 支持部分匹配
+:set hlsearch 将匹配的部分高亮显示
+:set noincsearch 将部分匹配关闭(在前面加上no)
 
-## 移动
-* 怎么快速回到文档首部：gg
-## 插入
-* 怎么在该行的上面直接插入：O
-## 替换
-* `s`
-    * `:s/going/rolling`：当前行的第一个
-    * `:s/going/rolling/g`:当前行的全部
-    * `%s/going/rolling/g`:全部文件
 # Postman
 * Postman中的param与body中的form-data的区别？
 get请求，可以在param中添加参数，会自动在url的后面加上?name=cbc&age=10
