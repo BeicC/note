@@ -49,10 +49,19 @@ rm -r dir/ # 使用rm命令删除一个文件夹
 rmdir dir/ # rmdir命令只能删除空文件夹
 rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 ```
+## `echo`
+* `echo $?`
+返回 上一条命令(程序)的return值
+## 重定向
+* `find /etc -type f 1> ~/result.txt 2> ~/error.txt`
+`>`代表重定向，在写入之间会将r`result.txt`和`error.txt`清空
+与之相对的是`>>`，代表将内容追加在两个文件后
+前面的`1`代表`stdout`,如果不写，默认为`1`
+`stdin`:`0`;`stdout`:`1`;`stderr`:`2`
 ## terminal
-* <ctrl> + a will move the cursor to the beginning of the current line (helpful for fixing mistakes)
-* <ctrl> + e will move the cursor to the end of the current line (helpful for fixing mistakes)
-* <ctrl> + r will let you search through your recently used commands
+* \<ctrl> + a will move the cursor to the beginning of the current line (helpful for fixing mistakes)
+* \<ctrl> + e will move the cursor to the end of the current line (helpful for fixing mistakes)
+* \<ctrl> + r will let you search through your recently used commands
 # Virtual Box
 ## 1.网络
 * situation：
