@@ -1242,6 +1242,9 @@ list.forEach(System.out::println);
 * 理解方法引用
 使用方法引用的时候，说明该参数需要一个函数
 而函数我只关心参数和函数体
+# Stream
+## reference
+* [Introduction to Java 8 Streams -by daeldung](https://www.baeldung.com/java-8-streams-introduction)
 # 并发/异步编程
 ## synchronized
 * 同步方法中的锁对象是谁？

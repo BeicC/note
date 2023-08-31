@@ -1,6 +1,6 @@
 # C "Modules"
 ## reference
-* [Cris Jordan](https://www.youtube.com/watch?v=8KyZedtkEhk)
+* [Kris Jordan](https://www.youtube.com/watch?v=8KyZedtkEhk)
 ## Header File
 * 背景
 将一个C程序分为`.c`和`.h`，目的是为了模块化
@@ -51,3 +51,35 @@ C文件在编译之前，会先进行预处理
 Use dir as the logical root directory for headers and libraries.  For example, if the compiler normally searches for headers in /usr/include and libraries in /usr/lib, it instead searches dir/usr/include and dir/usr/lib.
 ## inspect `.o` file
 * utility programe:`objdump`
+# Function Pointers
+## referece
+* [Kris Jordan](https://www.youtube.com/watch?v=RtLFA99aEzo&t=50s)
+> ps:函数名其实是地址
+```c
+#include <stdio.h>
+const int a = 1;
+int main(){
+    printf("%p\n",&a);
+    printf("%p\n",main); //0x55893ba00149
+}
+```
+* function pointer
+```c
+#include <stdio.h>
+int add(int,int);
+
+int main(){
+    int (*function_pointer)(int,int); //声明一个函数指针
+    function_pointer = add;
+    printf("1+2=%d\n",add(1,2));
+    printf("1+2=%d\n",function_pointer(1,2));
+    return 0;
+}
+int add(int a,int b){
+    return a+b;
+}
+```
+* 函数指针声明的步骤
+1、`int function_pointer(int,int)`
+2、`int *function_pointer(int,int)`
+3、`int (*function_pointer)(int,int)`

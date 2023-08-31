@@ -352,6 +352,10 @@ $ git config --global user.email 527609724@qq.com
 ## reference
 * [nju PA](https://nju-projectn.github.io/ics-pa-gitbook/ics2020/0.4.html)
 ## vimtutor
+### 移动
+* 整页移动
+CTRL+E
+CTRL+Y
 ### lesson 1
 * x删除
 * i在cursor上直接添加
