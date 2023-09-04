@@ -3,6 +3,8 @@
 * [VMware下载和破解](https://www.ssymon.com/archives/vmware-download-key)
 * [自适应屏幕](https://www.cnblogs.com/jie-fang/p/10270232.html)
 # Linux
+* 查看某个软件有没有安装
+`xxx --version`或者`command -v xxx`
 ## 1.Linux中的目录
 * /usr(UNIX software Resource)
 ## man
@@ -379,6 +381,7 @@ d2w:执行2次，dw
 为什么不是dd2？因为当输入dd的时候，这个命令会立即生效，所以想要重复，需要把数组放在前面
 * u&U
 u:undo
+`ctrl + r`:撤销undo
 U:undo the whole line
 ### lesson 3
 * p
@@ -427,7 +430,31 @@ v 进入visual模式
 :set incsearch 支持部分匹配
 :set hlsearch 将匹配的部分高亮显示
 :set noincsearch 将部分匹配关闭(在前面加上no)
-
+# Tmux
+## reference
+* [Learn Linux TV: Tmux series](https://www.youtube.com/watch?v=UxbiDtEXuxg)
+## 使用
+* detach and attach
+`CTRL+b 松开 在按d`：detach tmux session
+`tmux list-session`或者`tmux ls`: 查看有哪些tmux session
+`tmux attach`或者`tmux a`: attach
+tmux attach 会自动打开最近使用的一个session
+> 在shell中输入`tmux`与`tmux attach`的区别
+`tmux`告诉tmux开启一个new session；`tmux attach`告诉tmux使用原来的session
+* split
+`CTRL+b 松开 再按%`:会将当前的窗口左右split
+`CTRL+b 松开 再按"`:会将当前的窗口上下split
+`CTRL+b 松开 ↑↓←→`：move from panel to panel
+`CTRL+b 不松开 ↑↓←→`：将当前panel放大缩小
+* window
+`tmux new-window`或者`CTRL+b c`:新建window
+`CTRL+b p`:previosu window `CTRL+b n`:next window
+`CTRL+b &`:kill the window
+`CTRL+b ,`:rename the window
+* session
+`tmux attach -t 1`:打开session1
+进入tmux中某个session，`tmux rename-session xx`或者`CTRL+b $`:session重命名
+`CTRL+b s`：switch between session
 # Postman
 * Postman中的param与body中的form-data的区别？
 get请求，可以在param中添加参数，会自动在url的后面加上?name=cbc&age=10

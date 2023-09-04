@@ -83,3 +83,8 @@ int add(int a,int b){
 1、`int function_pointer(int,int)`
 2、`int *function_pointer(int,int)`
 3、`int (*function_pointer)(int,int)`
+# Dynamic Memory Allocation
+## `malloc`,`calloc`和`realloc`的区别
+* `malloc(n)`会分配连续n的内存，但不会初始化（里面的数据是garbage）
+* `calloc(n)`和`malloc`差不多，但是会将这些内存初始化为0
+* `void* realloc(void *pointer,size_t size)`:重新开一块`size`的内存，并且把`pointer`指向的内容复制过来
