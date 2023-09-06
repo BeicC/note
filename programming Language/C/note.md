@@ -88,3 +88,81 @@ int add(int a,int b){
 * `malloc(n)`会分配连续n的内存，但不会初始化（里面的数据是garbage）
 * `calloc(n)`和`malloc`差不多，但是会将这些内存初始化为0
 * `void* realloc(void *pointer,size_t size)`:重新开一块`size`的内存，并且把`pointer`指向的内容复制过来
+# Input And Output
+## reference
+* [The.C.Programming.Language.2nd.Edition]()
+## 文件的理解
+```txt
+//a.txt
+Hello
+World!
+this
+is
+```
+在内存中长这样
+`H`,`e`,`l`,`l`,`o`,`10(LF)`,`W`,....,`i`,`s`,`10(LF)`,`-1`
+## scanf family
+
+## printf family
+### sprintf
+* `int sprintf(char* string,char *format,arg1,arg2....)`
+与`printf`作用差不多，只不过把输出的内容放到`string`里,而不是标准输出
+### fprintf
+* `int fprintf(FILE* fp, char *format,....)`
+将内容输出到fp文件指针指向的文件中
+所以`fprintf(stdout,format,...)`等价于`printf()`
+## stdin,stdout,stderr
+* 可以把`stdin`,`stdout`,`stderr`看成文件
+> When a C program is started, the operating system environment is responsible for opening three files and providing file pointers for them. These files are the standard input, the standard output, and the standard error; the corresponding file pointers are called stdin, stdout, and stderr, and are declared in<stdio.h>. 
+* 在C语言中，`stdin`,`stdout`,`stderr`是文件指针`FILE *`
+之所以可以在main函数中直接使用`stdin`字符串，是因为`stdin`定义在`stdio.h`的`#define`里
+```c
+//stdio.h
+/* Standard streams.  */
+extern FILE *stdin;     /* Standard input stream.  */
+extern FILE *stdout;        /* Standard output stream.  */
+extern FILE *stderr;        /* Standard error output stream.  */
+/* C89/C99 say they're macros.  Make them happy.  */
+#define stdin stdin
+#define stdout stdout
+#define stderr stderr
+```
+## file access 系列
+### fopen
+* `FILE *fopen(char *name, char *mode)`
+如果name不存在，则返回NULL
+如果存在，则返回一个FILE指针。注意：这个指针指向的位置并不是文件数据的缓冲区，而是指向一个结构体
+该结构体大概如下所示
+```c
+typedef struct FILE{
+    void *databuffer;
+    void *character_position;
+    void *mode; //是读还是写？
+    .....
+}FILE
+```
+### fclose
+* `int fclose(FILE* fp)`
+1、释放`struct FILE`内存
+2、flush buffer that putc use
+### fscanf
+* `int fscanf(FILE *ptr,char *format,...)`
+### fprintf
+* `int fprintf(FILE *ptr,char *format,...)`
+### exit
+在main函数最后，`exit(0)`和`return 0`等价
+在其他函数中，当调用`exit()`，会terminate the whole process,而不是仅仅返回
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+void f(){
+    printf("Executing f\n");
+    exit(0);
+}
+
+int main(){
+    f();
+    printf("Back from f\n"); //You never get "Back from f"
+}
+```

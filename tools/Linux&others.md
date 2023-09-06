@@ -7,6 +7,7 @@
 `xxx --version`或者`command -v xxx`
 ## 1.Linux中的目录
 * /usr(UNIX software Resource)
+很多可执行程序都在`/usr/bin`目录下，如：`ls`
 ## man
 * 背景
 Linux里面有很多命令，如何了解一个命令该怎么使用？
@@ -31,6 +32,9 @@ Linux将各种命令分为了9类，分别为：
 查看reboot命令在哪个分类下：`man -f reboot`；
 然后就可以使用`man 2 reboot`查看系统调用的reboot；
 使用`man 8 reboot`查看系统管理中的reboot
+## `cd`
+* `cd -`
+比如我现在在`/home/beichen/CS61C/su20-project/`目录下，我通过`cd ~`回到用户目录，进行一番修改后，我想回到原来的目录，就不需要输入`cd /home/beichen/CS61C/su20-project`
 ## `ll`是什么
 `ll`是`ls -alF'`的别名（alias），可在Linux输入`type ll`查看；
 也可通过`alias`命令查看有哪些别名
@@ -64,6 +68,13 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 * \<ctrl> + a will move the cursor to the beginning of the current line (helpful for fixing mistakes)
 * \<ctrl> + e will move the cursor to the end of the current line (helpful for fixing mistakes)
 * \<ctrl> + r will let you search through your recently used commands
+## `$PATH`
+* `echo $PATH`
+显示变量中的内容
+* 理解
+当在bash中输入`ls`的时候，bash会在$PATH中的目录中依次寻找，如果在某个目录中找到ls可执行文件，bash就执行
+## `chmod`
+
 # Virtual Box
 ## 1.网络
 * situation：
@@ -345,7 +356,10 @@ $ git config --global user.email 527609724@qq.com
 ## git操作
 * 分支
     * `git branch -a`：查看所有分支
-    * ``
+* situation:通过`git commit`提交了几个版本之后，想回到以前的某个版本。该怎么办？
+1、通过`git log`得到想回到的版本的commit hashcode
+2、通过`git checkout <commit hashcode>`回到指定的版本
+3、通过`git checkout -`回到当前版本
 # GDB
 ## 参考
 * [cs61C gbd card](https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/gdb5-refcard.pdf)
@@ -358,6 +372,8 @@ $ git config --global user.email 527609724@qq.com
 * 整页移动
 CTRL+E
 CTRL+Y
+* normal模式按`w`移动到下一个单词头部，`e`移动到下一个单词尾部，如果不小心多按了一下`e`，按`b`返回到上一次的位置
+通常都是不断的`e`，然后`a`
 ### lesson 1
 * x删除
 * i在cursor上直接添加
@@ -397,6 +413,7 @@ CTRL+g 展示当前行数以及文件信息
 G 移动到文件最底行
 gg 移动到文件第一行
 356+G 跳转到第365行（356,GO！）
+通过`CTRL+o`回到光标上一次的位置
 * 查找
 /abc 查找abc(从前往后找)
 n 查找下一个；N 查找上一个
@@ -430,6 +447,18 @@ v 进入visual模式
 :set incsearch 支持部分匹配
 :set hlsearch 将匹配的部分高亮显示
 :set noincsearch 将部分匹配关闭(在前面加上no)
+## config vim
+### `.vimrc`
+```bash
+if has("syntax")
+  syntax on
+endif # 开启语法高亮
+
+set autoindent # 原因：大括号/光标可以自动对齐，而不是每次回车后都来到行首
+set tabstop=4 # 原因：默认一个tab是八个空格
+set relativenumber # 原因：在normal模式输入4k可以往下移动四行，但是如何快速知道我想跳转的行相对于当前行？
+set number # 原因：可以知道当前代码所在的行数
+```
 # Tmux
 ## reference
 * [Learn Linux TV: Tmux series](https://www.youtube.com/watch?v=UxbiDtEXuxg)
