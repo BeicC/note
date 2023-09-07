@@ -207,6 +207,11 @@ sudo chown -R beichen:beichen /home/beichen2
 [link](https://blog.csdn.net/fantasyYXQ/article/details/125607352)
 * 代码自动对齐
 shift+alt+f
+## 插件配置
+* 在marketplace中找到插件后，需要配置
+1、通过CTRL+shift+p搜索`setting.json，找到open user setting
+2、在最后加个逗号，把插件配置粘贴进来
+
 # Markdown Preview Enhanced 
 * [link](https://blog.csdn.net/while0/article/details/124677531?spm=1001.2101.3001.6650.7&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-7-124677531-blog-94321593.pc_relevant_3mothn_strategy_recovery&utm_relevant_index=10)
 * esc：在vscode预览模式下显示目录
@@ -364,16 +369,71 @@ $ git config --global user.email 527609724@qq.com
 ## 参考
 * [cs61C gbd card](https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/gdb5-refcard.pdf)
 * [如何显示所有局部变量、全局及静态变量、方法中的参数？](https://stackoverflow.com/questions/6261392/printing-all-global-variables-local-variables)
+## 使用
+* [awesome video！](https://www.youtube.com/watch?v=bWH-nL7v5F4)
+```bash
+gcc -g a.c #在编译的时候就要加上`-g `flag
+gdb a.out
+gdb --args ./a.out arg1 arg2 #如果`a.out`需要参数
+
+(gdb)
+set args arg1 arg1 # 输入`a.out`的参数
+layout next #展示代码
+run #运行代码
+break main #在main函数出设置断点；可以紧跟run to restart the program
+break 10 #在第10行处设置断点；可以紧跟run to restart the program
+clear 10 #清除第10行处的断点
+next(n) #run line by line,如果有函数则直接跳过
+step(s) # 和next类似，但是如果有函数，会进入函数内部执行
+print i #查看变量i的值
+print primes@10 #primes是一个数组；该操作会输出长度为10的数组，但里面是地址
+print *primes@10 # 这样才是输出primes数组中前10个元素的值
+print primes[5] #查看primes数组下标为5的元素值
+watch x #对x变量进行监视，如果x的值变了，会输出
+
+quit #离开gdb
+
+(gdb layout)
+refresh #如果发现display错位了，screw the display
+上下箭头 # 可以移动源代码
+
+(运行后出现segment fault)
+set args arg1
+layout next
+run
+backtrace full # 会先会显示segment fault出现在哪一行
+```
+
 # VIM
 ## reference
 * [nju PA](https://nju-projectn.github.io/ics-pa-gitbook/ics2020/0.4.html)
+* [VIM 实用技巧](https://weread.qq.com/web/bookDetail/ce132a905b207dce166506f)
 ## vimtutor
+### visual mode 
+* 复制一行
+```bash
+yy #复制一整行
+p #粘贴到光标下面
+P # 粘贴到光标上面
+也可以使用5p #粘贴5行
+```
+* 删除选中
+```bash
+v
+选中
+d
+```
 ### 移动
 * 整页移动
-CTRL+E
-CTRL+Y
+```
+一行一行的滚动: CTRL+E CTRL+Y
+半页半页的滚动：CTRL+d CTRL+u
+```
 * normal模式按`w`移动到下一个单词头部，`e`移动到下一个单词尾部，如果不小心多按了一下`e`，按`b`返回到上一次的位置
 通常都是不断的`e`，然后`a`
+* 移动到行首
+situation：在行首加上`//`来注释掉某行代码
+`0`移动到行首部（顶格），`^`移动到行首部(第一个非空格字符)
 ### lesson 1
 * x删除
 * i在cursor上直接添加
@@ -459,6 +519,29 @@ set tabstop=4 # 原因：默认一个tab是八个空格
 set relativenumber # 原因：在normal模式输入4k可以往下移动四行，但是如何快速知道我想跳转的行相对于当前行？
 set number # 原因：可以知道当前代码所在的行数
 ```
+## quickfix list
+### 查找
+
+```bash
+:copen # 打开quickfix list window
+:cn (:cnext的缩写) #移动到quickfix list的下一条，光标会自动移动
+:cp (:cprevious的缩写) #移动到quickfix list的上一条，光标会自动移动
+```
+### fix compilation error
+```bash
+:make
+:copen
+:cclose #关闭quickfix list
+ctrl+w j #将光标从代码区回到quickfix list
+```
+## ctags
+* 使用原因：
+在idea中，可以按住CTRL点击函数，可以查看该函数的细节。在vim中，如何实现跳转？
+* 使用
+1、安装ctags
+2、在源代码目录中执行`ctags -R`,会生成一个tags文件(dataBase)
+3、用vim打开文件，将光标移动到函数名称上，`CTRL+]`
+4、用`CTRL+]`进行traverse的时候，实际上是一个stack，如果想回去:`CTRL+t`
 # Tmux
 ## reference
 * [Learn Linux TV: Tmux series](https://www.youtube.com/watch?v=UxbiDtEXuxg)
