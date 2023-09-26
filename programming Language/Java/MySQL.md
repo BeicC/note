@@ -494,16 +494,39 @@ CALL InsertRand(1111, 2222, 5555);
 ```
 
 # 索引
-* 索引的种类
-1、主键索引
-2、唯一性索引
-3、普通索引（二级索引）
-4、联合索引
-* 为什么MySQL中的索引实现为B+tree？B+树比B树好在哪里？
-B+树中的叶子节点存在一个指针，指向相邻的叶子节点，又因为叶子节点即数据，这样在进行全表扫描的时候比较有优势
-* 索引出现的背景
+## reference
+* [第6章 快速查询的秘籍-B+树索引](https://relph1119.github.io/mysql-learning-notes/#/mysql/06-%E5%BF%AB%E9%80%9F%E6%9F%A5%E8%AF%A2%E7%9A%84%E7%A7%98%E7%B1%8D-B+%E6%A0%91%E7%B4%A2%E5%BC%95)
+## 为什么需要索引？
 MySQL表中的每条记录会按照主键值的大小串联成一个单链表，这个链表被分成了几段，每一段成为一个数据页，在每个数据页中，mysql通过页目录这种结构实现了对有序单链表的二分查找。
 如果以主键进行查找，尽管在单个数据页中可以用二分来缩短查找时间，但仍然要遍历每个数据页；
+## 索引的种类
+1、主键索引(聚簇索引)
+如果设置主键，mysql会自动创建主键索引，不需要使用index关键字
+2、唯一性索引
+当使用`unique key (c3)`建立唯一性约束时，会自动为`c3`创建普通索引
+3、普通索引（二级索引）
+```sql
+使用index关键字创建的索引
+CREATE TABLE index_demo(
+    c1 INT,
+    c2 INT,
+    c3 CHAR(1),
+    PRIMARY KEY(c1),
+    INDEX idx_c2 c2
+);
+```
+4、联合索引
+```sql
+CREATE TABLE index_demo(
+    c1 INT,
+    c2 INT,
+    c3 CHAR(1),
+    PRIMARY KEY(c1),
+    INDEX idx_c2_c3 (c2, c3)
+);
+```
+* 为什么MySQL中的索引实现为B+tree？B+树比B树好在哪里？
+B+树中的叶子节点存在一个指针，指向相邻的叶子节点，又因为叶子节点即数据，这样在进行全表扫描的时候比较有优势
 如果不以主键进行查找，那就需要去遍历每条记录！
 * 聚簇索引vs二级索引
 数据库中的表默认以主键建立聚簇索引，叶子节点中的页存的就是数据；
@@ -534,6 +557,36 @@ where age = 18 ×
 ```sql
 alter TABLE indextest ADD INDEX myindex(id2);
 ```
+## 如何验证sql查询使用了索引？
+```sql
+explain select * from single_table order by key2 limit 10;
+# 如果Extra中的是Using fileSort，则没有使用索引
+# 如果Extra中的是Using index，则使用了索引
+```
+> Q:为什么我对key2列建立了普通索引，可explain select之后使用的仍然是fileSort？
+MySQL中的优化器会判断：是直接对记录进行filesort，还是使用索引+回表的代间小
+-《从根儿理解Mysql-ch7-回表的代价》
+## 升序索引&降序索引
+```sql
+CREATE TABLE index_demo(
+    c1 INT,
+    c2 INT,
+    c3 CHAR(1),
+    PRIMARY KEY(c1),
+    INDEX idx_c2_c3 (c2 ASC, c3 DESC)
+);
+```
+> ps:降序索引虽然5.7语法支持，但B+树的叶子节点还是按照升序排列的
+8.0及其之后才支持真正的降序索引
+
+在创建联合索引时，先按照c2字段升序排列，如果c2字段相同，在按照c3字段**降序**排列
+
+## 为什么会有升序索引&降序索引？
+### reference
+* [不可以使用索引进行排序的几种情况](https://relph1119.github.io/mysql-learning-notes/#/mysql/07-%E5%A5%BD%E4%B8%9C%E8%A5%BF%E4%B9%9F%E5%BE%97%E5%85%88%E5%AD%A6%E4%BC%9A%E6%80%8E%E4%B9%88%E7%94%A8-B+%E6%A0%91%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8)
+为了定制化：
+比如我大多数情况下需要一些数据，这些数据需要按照c2升序，c3降序
+如果不支持降序索引`INDEX idx_c2_c3 (c2 ASC, c3 ASC)`,那么其实这个索引是用不到的。因为查询语句中需要c2升序，c3降序,而索引是c2升序，c3升序，不一致，就用不了索引；MySQL会默认使用filesort
 # 事务
 * 为什么要用事务？
 ```sql

@@ -2294,7 +2294,7 @@ pageContext->request->session->application
 引入Vo之后：
 1、页面需要什么，Vo定义什么。不会暴露多余的数据
 2、前端只需要知道Vo中的各个属性的含义就好了，而且只有一个Vo对象返回给前端，更方便
-# JWT
+# JWT(Json Web Token)
 * 参考
     * [编程不良人B站视频](https://www.bilibili.com/video/BV1i54y1m7cP/?spm_id_from=333.999.0.0)
 * cookie时代
