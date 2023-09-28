@@ -55,8 +55,26 @@ public void annoTest(){
 > Q:如果我在不同包下有两个Person类，其中pojo.Person定义在bean.xml中，aop.Person直接使用@Component，最后ioc容器中会有几个person？
 只有1个，是pojo.Person
 ## IOC容器
+### Bean-XML
+### Bean的作用域
+即ioc容器中的组件是单实例对象，还是多实例对象
+* Singleton
+该bean在内存中只存在一个实例。这种bean不能存在可以修改的field，否则多线程访问的时候，多个线程都对field进行修改，造成线程相关的问题
+类似的还有Servlet，Servlet在系统中也只存在一个实例，每一个request到来的时候就会分配一个线程来执行service方法，所以Servlet中根本没有属性。
+* Prototype（很少用）
+每次使用都会创建一个新的对象
+
+web环境：
+* request
+* session
+* Application
+```java
+@Component //默认id=person
+@Scope("prototype") //如果不写，默认singleton
+public class Person {
+}
+```
 * 查看IOC容器里面的所有组件：`ioc.getBeanDefinitionNames();`
-----
 * FactoryBean
     ```java
     public class UserFactory implements FactoryBean<User> {
@@ -124,23 +142,6 @@ public void annoTest(){
         * `@Service`什么意思？
         * `@Controller`什么意思？
     * `@Value()`什么意思，等价于在xml中写的什么？可以写在什么的上面？（2个）
-* Bean的存在方式
-    * Singleton
-    该bean在内存中只存在一个实例。这种bean不能存在可以修改的field，否则多线程访问的时候，多个线程都对field进行修改，造成线程相关的问题
-    类似的还有Servlet，Servlet在系统中也只存在一个实例，每一个request到来的时候就会分配一个线程来执行service方法，所以Servlet中根本没有属性。
-    * Prototype（很少用）
-    每次使用都会创建一个新的对象 
-    ------------
-    web环境：
-    * request
-    * session
-    * Application
-    ```java
-    @Component //默认id=person
-    @Scope("prototype") //如果不写，默认singleton
-    public class Person {
-    }
-    ```
 
 * `@Autowired`
 如果容器中的类型只有一个，那很简单，就注入对应类型的对象
@@ -852,13 +853,110 @@ log.error("这是{}","{}占位符");//通过{}进行占位
 @Value("${server.port}") //将配置文件中对应的值注入到URL字符串里面
 String URL;
 ```
-* `@Configuration`
-    * 出现的背景
-    因为在SpringBoot中，没有了以前的`beans.xml`配置文件，那该如何向Spring中添加组件？
-    如果支持注解开发，我们可以使用`@Component`注解使某个类成为组件，可是如果我们引入的是第三方jar包里的类，我们该如何是第三方类成为组件？我们又不可能去修改jar里面的代码。这时候就需要用到配置类
-    * 使用：[click](#Configuration)
-* `@ConfigurationProperties`
-    * 
+### `@Configuration`
+* 出现的背景
+因为在SpringBoot中，没有了以前的`beans.xml`配置文件，那该如何向Spring中添加组件？
+如果支持注解开发，我们可以使用`@Component`注解使某个类成为组件，可是如果我们引入的是第三方jar包里的类，我们该如何是第三方类成为组件？我们又不可能去修改jar里面的代码。这时候就需要用到配置类
+比如说我们想往springboot的ioc容器中放一个线程池组件
+* 使用
+step1:
+```java
+//com.example.config包下新建Myconfig配置类
+
+@Configuration //将这个类标志为配置类，相当于以前的配置文件beans.xml
+public class MyConfig {
+    //作用在方法上，将该方法的返回值放到ioc容器里面
+    //相当于xml中的bean标签，如果只写@Bean，id默认为方法名，class为返回值类型
+    @Bean("person1") //修改id名字为person1
+    public Person person(){
+        return new Person();
+    }
+}
+```
+step2:
+```java
+@SpringBootApplication
+@ComponentScan("com.example") //主程序中加上ComponentScan
+public class DemoApplication {
+
+	public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+	}
+
+}
+```
+
+* 查看ioc容器中的组件
+```java
+//主程序
+@SpringBootApplication
+@ComponentScan("com.example")
+public class DemoApplication {
+
+	public static void main(String[] args) {
+		ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
+
+		String[] names = run.getBeanDefinitionNames();
+
+		for (String name : names){
+			System.out.println(name);
+		}
+
+	}
+
+}
+```
+> ps:通过@Configuration+@Bean注册的组件，默认单实例
+可通过以下代码进行验证
+```java
+@SpringBootApplication
+@ComponentScan("com.example")
+public class DemoApplication {
+
+	public static void main(String[] args) {
+		ConfigurableApplicationContext run = SpringApplication.run(DemoApplication.class, args);
+
+		ThreadPoolExecutor poolExecutor1 = run.getBean("threadPoolExecutor", ThreadPoolExecutor.class);
+		ThreadPoolExecutor poolExecutor2 = run.getBean("threadPoolExecutor", ThreadPoolExecutor.class);
+		System.out.println(poolExecutor1 == poolExecutor2);
+	}
+
+}
+```
+### `@ConfigurationProperties`
+* 使用背景
+我们想往springboot的ioc容器中加入线程池组件，这样我们就可以在service中直接使用线程池了；
+可以通过配置类完成这一需求；
+但是线程池的创建有七大参数，这些参数我不想写死在代码中，我想写在配置文件中，这样就可以方便修改
+总结：把properties文件中的值与某个JavaBean绑定，这样我就可以在另一个Bean中读取该JavaBean中的属性
+* 步骤
+1.确保JavaBean是Ioc中的组件(加上@Component)
+```java
+@Component
+@Data
+public class ThreadPoolProperties {
+    private Integer coreSize;
+    private Integer maxSize;
+    private Integer keepAliveTime;
+}
+```
+2.加上`@ConfigurationProperties`注解
+```java
+@Component
+@ConfigurationProperties(prefix = "threadpool")
+@Data
+public class ThreadPoolProperties {
+    private Integer coreSize;
+    private Integer maxSize;
+    private Integer keepAliveTime;
+}
+```
+3.在application.properties中加上配置
+```properties
+threadpool.coreSize=10
+threadpool.maxSize=10
+threadpool.keepAliveTime=1
+```
 * `@Conditional`
     * `@ConditionalOnBean`
     ```java
