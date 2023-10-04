@@ -1691,10 +1691,42 @@ cas：取值：你取你的，我取我的；运算：你算你的，我算我�
 意味着效率很低
 
 在JDK1.6之后，synchronized锁会经历一个被称为锁升级的过程
-即抢不到synchronzed锁的线程，不会立即park掉
-他首先会自旋，不断尝试去抢锁（轻量级锁）
-如果自旋的线程数太多，在升级为重量级锁
+偏向锁：当系统中只有一个线程的时候，线程看一下锁对象中的某个属性，如果是自己，直接执行代码
+轻量级锁：如果第二个线程来了，发现锁的拥有者不是自己，则立刻执行CAS操作进行抢占锁
+重量级锁：如果第一次CAS操作抢占失败，则锁升级为重量级锁：在重量级锁中，该线程会自旋几次执行CAS操作，如果都抢不到锁，则park掉加入队列
+当释放锁的时候，会唤醒park掉的线程，让它重新竞争锁；但是不保证这个线程一定能抢到锁，如果抢不到，继续park
+> 所以synchronized锁是非公平锁
 
+#### 悲观锁 vs 乐观锁
+悲观锁or乐观锁是锁这一个概念的实现方式
+悲观锁：在访问共享变量之前尝试加锁，防止其他线程访问
+乐观锁：通过CAS的方式来判读当前线程能否访问共享变量
+
+### Lock接口
+
+Lock接口实现的锁与synchronized之间的区别
+1、使用Lock锁时，unlock方法一定要写在finally里面
+这是因为当发生异常的时候，synchronized锁默认会释放锁，而Lock锁却不会，如果Lock锁的unlock方法不写在finally里，可能会死锁
+#### ReentrantLock
+
+##### 公平锁 vs 非公平锁
+ReentrantLock在创建的时候可以声明为公平锁或者非公平锁
+通过下图阅读源码：
+公平锁：线程在抢锁的时候首先会看一看以前有没有线程抢锁（队列中有没有线程）
+非公平锁：线程不管三七二十一直接抢锁
+
+非公平锁会导致线程饥饿问题：即可能会发生某个线程一直抢到锁的情况
+
+<img src="./Fair and unFair.png">
+
+#### ReentrantLock为什么是可重入锁
+可重入锁是指：锁中套锁。如下图：
+<img src="./what is reentrant.png">
+ReentrantLock之所以是可重入的原因：
+<img src="./why ReentrantLock is a reentrant lock.png">
+
+> ps:Synchronized锁也是可重入锁：如下图
+<img src="./synchronized is reentrant.png">
 
 * `Thread.sleep()`与`TimeUnit.SECONDS.sleep()`的区别？
 功能完全一样，只不过`TimeUnit.SECONDS.sleep()`可读性更好

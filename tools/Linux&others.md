@@ -74,8 +74,54 @@ rm -rf dir/ # 使用rm命令删除一个文件夹，并且一路yes
 * 理解
 当在bash中输入`ls`的时候，bash会在$PATH中的目录中依次寻找，如果在某个目录中找到ls可执行文件，bash就执行
 ## `chmod`
+## `systemctl`
+### reference
+* [Learn Linux TV](https://www.youtube.com/watch?v=5JVBpXiYMKo)
+### `systemctl status`
+* 使用背景
+我想知道MYSQL的服务端有没有运行，因为如果MYSQL Daemon已经运行了，我就可以直接用client进行连接。如果没有运行，我应该首先启动MYSQL服务，在通过client进行连接。
+我该怎么做？
+```bash
+systemctl status mysql # the same name as the package that you installed
+
+# 按q退出
+```
+
+<img src="./image/systemctl status.png">
+
+* 注意点1：`enabled`表示该服务已经被设置成自启动
+* 注意点2：`active`表示该服务当前正在运行
+### `systemctl start`
+* 使用背景：如何启动某个服务？
+```bash
+sudo systemctl start mysql #启动MySQL服务端
+```
+### `systemctl stop`
+* 使用背景：如何停止某个服务？
+```bash
+sudo systemctl stop mysql #停止MySQL服务端
+```
+### `systemctl enable`
+* 使用背景：如上所述，如果某个服务我们发现是disable，即没有设置成开机自启动，那我们该如何将其设置为开机自启动呢？
+```bash
+sudo systemctl enable mysql # 将MySQL设置为开机自启动
+
+sudo systemctl enable --now mysql # not only enbale mysql,but also start mysql
+```
+### `systemctl disable`
+* 使用背景：同理，如果不想某个服务开机自启动，该怎么办？
+```bash
+sudo systemctl disable mysql # 将Mysql设置为不是开机自启动
+```
 
 # Virtual Box
+## 虚拟机中设置桥接，显示no select的问题
+通过[该帖子](https://stackoverflow.com/a/47418596)，发现自己的以太网属性中没有virtualBox相关的Driver
+<img src="./image/以太网属性.png">
+于是尝试按照帖子里的方法进行安装
+可是出现【安装失败：“未能添加要求的功能。错误是：找不到指定的模块”】问题
+根据[CSDN](https://blog.csdn.net/unwill/article/details/132835015)中的方法，成功解决
+
 ## 1.网络
 * situation：
 我在virtual Box中创建了一台虚拟机，它默认网络是NAT模式。我想在本地通过ssh连接虚拟机，但是连接不上
@@ -103,6 +149,20 @@ Rule1的意思是：任何访问127.0.0.1(本主机)22端口中的请求，都�
 ssh beichen@127.0.0.1
 ```
 方法二：配置双网卡
+step1: 这一步的作用是在host上创建一个虚拟网卡
+<img src="./image/双网卡1.png">
+
+创建完后通过`ipconfig`可以看到，虚拟网卡创建完成
+<img src="./image/双网卡2.png">
+
+step2:虚拟机上进行网卡配置
+<img src="./image/双网卡3.png">
+
+step3: 进入虚拟机，手动配置网络
+> 虚拟机中的ip地址，子网掩码怎么填？
+看主机中的虚拟网卡中的信息，只要保证虚拟机网络和host在同一子网内即可
+
+<img src="./image/双网卡4.png">
 
 # 配置新Linux
 * 更新源和升级软件
