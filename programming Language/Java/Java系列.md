@@ -1728,6 +1728,17 @@ ReentrantLock之所以是可重入的原因：
 > ps:Synchronized锁也是可重入锁：如下图
 <img src="./synchronized is reentrant.png">
 
+### ReentrantReadWriteLock
+可重入读写锁：一个资源能够被多个读线程同时访问，或者被一个写线程访问；但是不能同时存在读写线程
+
+> PS：ReentrantReadWriteLock非常适用于读多写少的场景：会比其他的锁更快
+#### 互斥锁 vs 共享锁
+像synchronized，ReentrantLock：在访问共享资源的时候首先要上锁。同一个资源永远只有一个线程访问；而ReentrantReadWriteLock在读操作上进行了优化，允许多个线程同时读。所以ReentrantReadWriteLock是一种共享锁
+#### 写线程饥饿问题
+ReentrantReadWriteLock是读读共享，读写互斥
+即在读线程完成之前，是不允许写线程执行的
+
+
 * `Thread.sleep()`与`TimeUnit.SECONDS.sleep()`的区别？
 功能完全一样，只不过`TimeUnit.SECONDS.sleep()`可读性更好
 ```java
@@ -2151,10 +2162,14 @@ JDK8及以后：Young Generation Space,Tenure Generation Space,Meta Space
         2. 类型指针：指向class对象
     * 实例数据（Instance Data）
 * GC
-创建的对象会先被分配在Eden区，如果Eden满了会触发YoungGC，YGC会在Eden区进行垃圾回收，没用的对象被回收，如果还有用就会将其放进S0/S1区；除此之位，YGC还会对S0/S1进行垃圾回收，YGC的结果是Eden区和S0/S1堆空间为空；如果S0/S1放不下或者次数超过了15，该对象就会进入老年区
+创建的对象会先被分配在Eden区，如果Eden满了会触发YoungGC，YGC会在Eden区进行垃圾回收，没用的对象被回收，如果还有用就会将其放进S0/S1区；除此之位，YGC还会对S0/S1进行垃圾回收，YGC的结果是Eden区和S0/S1堆空间为空；
+如果进行一个YGC后（S0/S1放不下或者次数超过了15）在新生代仍然放不下该对象，该对象就会进入老年区
 当老年区被放满时，就会触发full/major GC，如果major GC不能回收，就会OOM
-    * GC实现的细节
-    GC Roots，可达性分析算法：
+> full GC:会对新生代和老年代进行全面扫描，来尽可能的回收内存
+
+* GC实现的细节
+GC Roots，可达性分析算法：
+
 * 内存溢出&内存泄漏
     * 内存溢出（OOM）
         1. 堆空间设置的太小
