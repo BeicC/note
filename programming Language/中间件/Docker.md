@@ -46,6 +46,30 @@ sudo docker exec -it getting-started ls /
 ```bash
 sudo docker exec -it getting-started /bin/sh
 ```
+## `docker update`
+```bash
+docker update nginx --restart=always # 让nginx容器开机自启动
+```
+## 容器目录映射
+situation：
+以nginx容器为例，我想直接从host访问nginx容器中的配置文件。我该怎么做？
+（nginx容器内部连个vi程序都没有，bash也没有高亮，想要修改nginx的配置文件很不方便）
+action：
+根据[nginx reference from Docker Hub](https://hub.docker.com/_/nginx)中的Complex configuration一节：
+```bash
+$ docker run --name tmp-nginx-container -d nginx
+# 先随便启动一个nginx容器
+$ docker cp tmp-nginx-container:/etc/nginx /mydata
+# docker cp命令：将容器中的文件复制到本地
+$ docker rm -f tmp-nginx-container
+# 把随便启动的容器删除
+$ docker run --name my-custom-nginx-container -v /host/path/nginx.conf:/etc/nginx/nginx.conf:ro -d nginx
+# 启动正式容器时，进行目录挂载
+```
+> Warnning!
+Docker中的目录挂载(bind mount:通过-v进行设置)，本源是host中的目录；
+必须在host中先有文件，然后才能通过-v选项；
+作用是：将host中的文件复制一份到容器，**并且**在host中对文件进行任何修改，都会同时显现在容器中
 ## 容器操作
 * 进入容器
 ```bash
@@ -53,10 +77,7 @@ docker exec -it  mysql /bin/bash # 进入mysql容器
 ```
 * 退出容器
 ```bash
-exit # 在容器内部执行exit，直接将该容器终止运行；并返回当前虚拟机
-
-CTRL+p+q # 返回当前虚拟机；但是容器继续执行；相当于后台执行
-
+exit （= CTRL+D） # 在容器内部执行exit，直接将该容器终止运行；并返回当前虚拟机
 ```
 * 启动已停止的容器
 ```bash

@@ -566,147 +566,229 @@ public class annotationTest{
 * 泛型程序设计
     * 为什么`Deque<Integer>`尖括号里只能是Integer不能是int？ Java核心卷1p320
 ## 集合 
-* Collection接口
-    * 往Collection中存自定义对象的时候，自定义类要重写哪些方法？
-    equals方法
-    对于List而言，尽管add操作不需要对象重写方法，但remove/contains操作会调用equals方法。
-    对于set而言，在添加的时候就会用到equals方法和hashCode方法
-    * `Person[] res = Collection.toArray(new Person[0])`
-    将集合转化为数组,括号里面需要一个数组的首地址，为了节省空间，就写成了`Person[0]`
-    * List
-        * List的常用方法
-        增、删、改、查、插、长度、遍历
-        add、remove、set、get、add、size、iterator
-        * ArrayList
-            * `RandomAccess`接口
-            1、需要背景
-            `RandomAccess`是给算法看的，如Collections中的binarySearch，如果某个List实现类RandomAccess接口，那么就会选择更高效的二分实现（直接通过下标访问的indexBinarySearch）。如ArrayList
-            否则只能通过iterator去一个个的移动（iteratorBinarySearch）。如LinkedList
-            * 扩容机制
-            在add第一个元素的时候会上来new的Object数组为10，不断往里面加元素，如果不够了就会扩为原来的1.5倍（`oldC = oldC + (oldC>>1)`）
-        * ArrayList与Vector
-        ArrayList作为List的主要实现类；Vector作为List的古老实现类
-        ArrayList与vector之间的关系像stringbuffer和stringbuilder
-        因为arraylist是线程不安全的，所以执行效率比较高；
-        而vector是线程安全的。所以通常使用arraylist而不用vector
-        > ArrayList的补充：
-        jdk7使用ArrayList空参构造器，会创建一个16的数组
-        jdk8使用空参构造器，不会创建数组，直到添加第一个数据的时候才会new数组
-        * ArrayList与LinkedList
-        ArrayList底层使用数组；频繁查询使用ArrayList
-        LinkedList底层使用双向链表；频繁删除、插入使用LinkedList
-        * iterator
-        对两个指针的封装体
-        在ArrayList中，iterator是一个内部类，对外提供功能
-    * set
-    无序性&不可重复性；如何理解无序性和不可重复性？
-    无序性：无序性是指添加的元素的位置在==逻辑上==是无序的。
-    比如List接口中的实现类是有序的，无论是ArrayList还是LinkedList，在逻辑上肯定第二个插入的元素在第一个插入的元素的后面；
-    而HashSet/HashMap却不是，插入元素的位置由hashCode配合上一个函数求得。所以很有可能后插入的元素在先插入元素的前面
-    <img src="./set无序.png" width=400px>
-    使用Set要重写添加类中equals()和hashCode()
-        * HashSet
-        * LinkedHashSet
-        hashset的子类；遍历时会按照当初添加的顺序遍历
-        <img src="LinkedHashSet.png" width=300px>
-        * TreeSet
-        1、底层使用红黑树实现，对象能够排序
-        2、使用TreeSet时，里面只能存相同类的对象
-        3、注意：TreeSet判断对象想不想同使用的时候CompareTo方法的返回值：如果返回值为0就认为两个对象是相同的。不像HashSet先根据hashCode再根据equasl()
-* Map接口
+### Collection接口
+* 往Collection中存自定义对象的时候，自定义类要重写哪些方法？
+equals方法
+对于List而言，尽管add操作不需要对象重写方法，但remove/contains操作会调用equals方法。
+对于set而言，在添加的时候就会用到equals方法和hashCode方法
+* `Person[] res = Collection.toArray(new Person[0])`
+将集合转化为数组,括号里面需要一个数组的首地址，为了节省空间，就写成了`Person[0]`
+#### List接口
+* List的常用方法
+增、删、改、查、插、长度、遍历
+add、remove、set、get、add、size、iterator
+* ArrayList
+    * `RandomAccess`接口
+    1、需要背景
+    `RandomAccess`是给算法看的，如Collections中的binarySearch，如果某个List实现类RandomAccess接口，那么就会选择更高效的二分实现（直接通过下标访问的indexBinarySearch）。如ArrayList
+    否则只能通过iterator去一个个的移动（iteratorBinarySearch）。如LinkedList
+    * 扩容机制
+    在add第一个元素的时候会上来new的Object数组为10，不断往里面加元素，如果不够了就会扩为原来的1.5倍（`oldC = oldC + (oldC>>1)`）
+* ArrayList与Vector
+ArrayList作为List的主要实现类；Vector作为List的古老实现类
+ArrayList与vector之间的关系像stringbuffer和stringbuilder
+因为arraylist是线程不安全的，所以执行效率比较高；
+而vector是线程安全的。所以通常使用arraylist而不用vector
+> ArrayList的补充：
+jdk7使用ArrayList空参构造器，会创建一个16的数组
+jdk8使用空参构造器，不会创建数组，直到添加第一个数据的时候才会new数组
+* ArrayList与LinkedList
+ArrayList底层使用数组；频繁查询使用ArrayList
+LinkedList底层使用双向链表；频繁删除、插入使用LinkedList
+* iterator
+对两个指针的封装体
+在ArrayList中，iterator是一个内部类，对外提供功能
+#### set接口
+无序性&不可重复性；如何理解无序性和不可重复性？
+无序性：无序性是指添加的元素的位置在==逻辑上==是无序的。
+比如List接口中的实现类是有序的，无论是ArrayList还是LinkedList，在逻辑上肯定第二个插入的元素在第一个插入的元素的后面；
+而HashSet/HashMap却不是，插入元素的位置由hashCode配合上一个函数求得。所以很有可能后插入的元素在先插入元素的前面
+<img src="./set无序.png" width=400px>
+
+使用Set要重写添加类中equals()和hashCode()
+* HashSet
+* LinkedHashSet
+hashset的子类；遍历时会按照当初添加的顺序遍历
+```java
+    public static void main(String[] args) {
+        Set set = new HashSet();
+        set.add(1);
+        set.add("cbc");
+        set.add(new Object());
+
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            Object ans = iterator.next();
+            System.out.println(ans);
+        }
+
+    }
+    /*
+        使用普通的HashSet，遍历结果：
+        1
+        java.lang.Object@3e3abc88
+        cbc
+        如果换成LinkedHashSet,遍历结果就会与添加时的顺序一致
+        1
+        cbc
+        java.lang.Object@3e3abc88
+    */
+```
+<img src="LinkedHashSet.png" width=300px>
+
+* TreeSet
+有什么用：
+往TreeSet里面添加同一个类中的不同对象后，在遍历的时候会按照有序的顺序遍历出来
+
+```java
+    public static void main(String[] args) {
+        Set set = new TreeSet();
+        set.add(1);
+        set.add(-230);
+        set.add(999);
+
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            Object ans = iterator.next();
+            System.out.println(ans);
+        }
+    }
+    /*
+    遍历结果：
+    -230
+    1
+    999
+    */
+```
+
+1、底层使用红黑树实现，对象能够排序
+2、使用TreeSet时，里面只能存相同类的对象
+3、注意：TreeSet判断对象想不想同使用的时候CompareTo方法的返回值：如果返回值为0就认为两个对象是相同的。不像HashSet先根据hashCode再根据equasl()
+
+TreeSet不可重复性的体现：
+通过compareTo方法，如果返回0则证明相同，不添加；而不是使用equals方法
+```java
+    public static void main(String[] args) {
+        Set set = new TreeSet();
+        set.add(new Person(10,"cbc1"));
+        set.add(new Person(10,"cbc2"));
+        set.add(new Person(10,"cbc3"));
+
+        Iterator iterator = set.iterator();
+        while (iterator.hasNext()){
+            Object ans = iterator.next();
+            System.out.println(ans);
+        }
+    }
+    /*
+    输出：
+    Person(age=10, name=cbc1)
+    */
+```
+
+## Map接口
+
 <img src="./Map.png" width=400px>
 HashMap作为Map的主要实现类；Hashtable作为Map的古老实现类;
 HashMap线程不安全，效率高；Hashtable线程安全，效率低
 HashMap可以存null的key或者value；而Hashtable不能
 LinkedHashMap继承HashMap，可以在遍历的时候按照添加的顺序去遍历
 TreeMap可以保证按照key进行排序，实现排序遍历
-    * HashMap
-        * HashMap的扩容机制
-        在put第一个元素的时候会new一个长度为16的Node数组(table);
-        如果往里面放的元素超过了threshold，就会去扩容：
-        新数组的size是原来的2倍`newCap = oldCap << 1`;新的threshold是原来的2倍`newThr = oldThr << 1`
-        往新的Node数组里面移动的策略：会计算在新的Node数组里面的位置；
-        HashMap中链，算上table中元素，最多能放8个；开始放第九个的时候
-        * HashMap中的factor的作用
-        factor用来指示当map中的元素个数达到Node数组百分之多少时，对Node数组进行扩容
-        有两个目的:1、使得在Map中的链表比较少2、Node数组利用率高
-        * HashMap put元素的过程
-        通过对hash进行运算(`i = (n-1)&hash`)算出该元素在Node数组中的位置i
-        如果该位置为null，直接插入
-        否则进行比较：1、如果hash值一样 并且（地址一样||equals返回true），直接修改 2、否则紧接着与链表中的下一个比较
-        * HashMap中的Node数组的长度为什么是2的幂次方？
-        源代码中的`(n - 1) & hash `等价于`hash%n`。前提是n必须为2的倍数
-    ```java
-    final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
-                   boolean evict) {
-        Node<K,V>[] tab; Node<K,V> p; int n, i;
-        if ((tab = table) == null || (n = tab.length) == 0)
-            //如果table数组没有初始化，就去new一个长度为16的Node数组
-            n = (tab = resize()).length;
-        if ((p = tab[i = (n - 1) & hash]) == null)//确定添加进来的元素在table数组中的位置
-            tab[i] = newNode(hash, key, value, null);
+
+### HashMap
+* HashMap的扩容机制
+在put第一个元素的时候会new一个长度为16的Node数组(table);
+如果往里面放的元素超过了threshold，就会去扩容：
+新数组的size是原来的2倍`newCap = oldCap << 1`;新的threshold是原来的2倍`newThr = oldThr << 1`
+往新的Node数组里面移动的策略：会计算在新的Node数组里面的位置；
+HashMap中链，算上table中元素，最多能放8个；开始放第九个的时候
+* HashMap中的factor的作用
+factor用来指示当map中的元素个数达到Node数组百分之多少时，对Node数组进行扩容
+有两个目的:1、使得在Map中的链表比较少2、Node数组利用率高
+* HashMap put元素的过程
+通过对hash进行运算(`i = (n-1)&hash`)算出该元素在Node数组中的位置i
+如果该位置为null，直接插入
+否则进行比较：1、如果hash值一样 并且（地址一样||equals返回true），直接修改 2、否则紧接着与链表中的下一个比较
+* HashMap中的Node数组的长度为什么是2的幂次方？
+源代码中的`(n - 1) & hash `等价于`hash%n`。前提是n必须为2的倍数
+```java
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                boolean evict) {
+    Node<K,V>[] tab; Node<K,V> p; int n, i;
+    if ((tab = table) == null || (n = tab.length) == 0)
+        //如果table数组没有初始化，就去new一个长度为16的Node数组
+        n = (tab = resize()).length;
+    if ((p = tab[i = (n - 1) & hash]) == null)//确定添加进来的元素在table数组中的位置
+        tab[i] = newNode(hash, key, value, null);
+    else {
+        Node<K,V> e; K k;
+        if (p.hash == hash &&
+            ((k = p.key) == key || (key != null && key.equals(k))))
+            e = p;
+        else if (p instanceof TreeNode)
+            e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
         else {
-            Node<K,V> e; K k;
-            if (p.hash == hash &&
-                ((k = p.key) == key || (key != null && key.equals(k))))
-                e = p;
-            else if (p instanceof TreeNode)
-                e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
-            else {
-                for (int binCount = 0; ; ++binCount) {
-                    if ((e = p.next) == null) {
-                        p.next = newNode(hash, key, value, null);
-                        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
-                            treeifyBin(tab, hash);
-                        break;
-                    }
-                    if (e.hash == hash &&
-                        ((k = e.key) == key || (key != null && key.equals(k))))
-                        break;
-                    p = e;
+            for (int binCount = 0; ; ++binCount) {
+                if ((e = p.next) == null) {
+                    p.next = newNode(hash, key, value, null);
+                    if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        treeifyBin(tab, hash);
+                    break;
                 }
-            }
-            if (e != null) { // existing mapping for key
-                V oldValue = e.value;
-                if (!onlyIfAbsent || oldValue == null)
-                    e.value = value;
-                afterNodeAccess(e);
-                return oldValue;
+                if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k))))
+                    break;
+                p = e;
             }
         }
-        ++modCount;//被修改的次数+1
-        if (++size > threshold)//map中的总数量+1
-            resize();
-        afterNodeInsertion(evict);
-        return null;
+        if (e != null) { // existing mapping for key
+            V oldValue = e.value;
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value;
+            afterNodeAccess(e);
+            return oldValue;
+        }
     }
-    ```
-    会去new一个长度为16的Node数组
-    <img src="HashMap_jdk7.png" width=600px>
-    <img src="HashMap_jdk8.png" width=600px>
-    * Properties:
-    1、常用来处理配置文件
-    2、作为HashMap的子类，它的特别之处就是key和value都是String类型
-    ```java
-    //==========a.cbc=============
-    //其实文件名只是一个标志，只要程序能找到就行，不管后缀是.txt还是.cbc
-    name=Tom
-    password=123456
-    //===========使用================
-    public static void main(String[] args) throws IOException {
-        Properties prop = new Properties();
-        prop.load(new FileReader("a.cbc"));//new FileReader还是new FileInputStream都可以
-        String name = prop.getProperty("name");
-        System.out.println(name);
-    }
-    ```
-    > Warning！
-    配置文件下面两种写法是不一样的!
-    driver=com.mysql.jdbc.Driver
-    当pros.getproperty()的时候，driver="com.mysql.jdbc.Driver";
-    driver="com.mysql.jdbc.Driver"
-    当pros.getproperty()的时候，driver=" "com.mysql.jdbc.Driver" ";
-    多个引号!
+    ++modCount;//被修改的次数+1
+    if (++size > threshold)//map中的总数量+1
+        resize();
+    afterNodeInsertion(evict);
+    return null;
+}
+```
+会去new一个长度为16的Node数组
+<img src="HashMap_jdk7.png" width=600px>
+<img src="HashMap_jdk8.png" width=600px>
+
+### LinkedHashMap
+
+
+### TreeMap
+
+### Properties:
+1、常用来处理配置文件
+2、作为HashMap的子类，它的特别之处就是key和value都是String类型
+```java
+//==========a.cbc=============
+//其实文件名只是一个标志，只要程序能找到就行，不管后缀是.txt还是.cbc
+name=Tom
+password=123456
+//===========使用================
+public static void main(String[] args) throws IOException {
+    Properties prop = new Properties();
+    prop.load(new FileReader("a.cbc"));//new FileReader还是new FileInputStream都可以
+    String name = prop.getProperty("name");
+    System.out.println(name);
+}
+```
+> Warning！
+配置文件下面两种写法是不一样的!
+driver=com.mysql.jdbc.Driver
+当pros.getproperty()的时候，driver="com.mysql.jdbc.Driver";
+driver="com.mysql.jdbc.Driver"
+当pros.getproperty()的时候，driver=" "com.mysql.jdbc.Driver" ";
+多个引号!
+
 ## 泛型（jdk5引入）
 * 为什么要使用泛型？（使用泛型与Object的区别）
 1、可以消除cast的代码
@@ -923,28 +1005,60 @@ reverseOrder底层仍然是调用类里面的compareTo方法。
         }
     }
     ```
-* 比较器
-    * comparable接口
-        * compareTo的写法：
-        this(A) compateTo(B)
-        如果A比B大，返回正；A比B小，返回负。这样写排序的时候默认从小到大
-        * 使用：
-        1、类继承接口，重写compareTo方法
-        2、将实例塞到数组里面，使用Arrays.sort()进行排序
-    如何对对象数组进行排序？
-    * comparator接口
-        * 为什么引入comparator接口？
-        一个类已经实现类comparable接口，但想按照其他规则排序，而且不想改类中的源代码：例如想要String从大到小去排序；或者相对JDK里面的类实现排序功能（JDK里没有实现comparable接口的类，但我们又不能改jdk的源码
-        * comparator的使用
-        实现compare方法，A compare B：如果A大于B返回正，小于返回负。默认从到大
-        ```java
-        Arrays.sort(str, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) { //接口的匿名实现类
-                return -o1.compareTo(o2);
-            }
-        });
-        ```
+### 比较器
+* comparable接口
+    * compareTo的写法：
+    this(A) compateTo(B)
+    如果A比B大，返回正；A比B小，返回负。这样写排序的时候默认从小到大（comparable接口中的compareTo方法上有注释）
+    * 使用：
+    1、类继承接口，重写compareTo方法
+    2、将实例塞到数组里面，使用Arrays.sort()进行排序
+如何对对象数组进行排序？
+```java
+//person class
+@Data
+@AllArgsConstructor
+public class Person implements Comparable<Person>{
+    int age;
+    String name;
+
+    @Override
+    public int compareTo(Person o) {
+        if (this.age < o.age){
+            return -1;
+        }else if (this.age > o.age){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+}
+
+//main
+public static void main(String[] args) {
+    Person[] arr = new Person[3];
+    arr[0] = new Person(2,"cbc1");
+    arr[1] = new Person(1,"cbc2");
+    arr[2] = new Person(3,"cbc3");
+
+    Arrays.sort(arr);
+    System.out.println(Arrays.toString(arr));
+}
+
+```
+* comparator接口
+    * 为什么引入comparator接口？
+    一个类已经实现类comparable接口，但想按照其他规则排序，而且不想改类中的源代码：例如想要String从大到小去排序；或者相对JDK里面的类实现排序功能（JDK里没有实现comparable接口的类，但我们又不能改jdk的源码
+    * comparator的使用
+    实现compare方法，A compare B：如果A大于B返回正，小于返回负。默认从到大
+    ```java
+    Arrays.sort(str, new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) { //接口的匿名实现类
+            return -o1.compareTo(o2);
+        }
+    });
+    ```
 * number类
     * BigDecimal
         * 为什么要使用Big Decimal？

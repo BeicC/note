@@ -222,10 +222,13 @@ GROUP BY Country; //2
 * group by后面跟多个字段？
 先根据第一个字段分组，在分组后的字段中按照第二个字段在分组
 <img src="./group by2.png">
+
 * group by 的位置
 from,on,where,group by,order by,limit
 ## having
-having用来进行条件过滤，一般和group by连用，将group by最后得到的虚拟表进行条件过滤
+having用来进行条件过滤，一般和group by连用
+对**虚拟表**进行过滤，不是结果集
+
 ## like
 * 占位符（wildcard）
     1、`%`:表示0个或多个
@@ -244,6 +247,7 @@ having用来进行条件过滤，一般和group by连用，将group by最后得�
 # The IN operator is a shorthand for multiple OR conditions.
 select * from article where article_id in (1,2,3)
 ```
+
 ## comment关键字 
 * [resources-link](https://www.qycn.com/xzx/article/7092.html)
 ```sql
@@ -255,6 +259,25 @@ select * from article where article_id in (1,2,3)
  show full columns from test;
  //查看表注释的方法
  show  create  table  test1; 
+```
+## limit
+```sql
+select * from user limit 2;//只看前两个
+select * from user limit 2,4//从结果下标为2的地方开始，往下4个，即（2,3,4,5)；显示这些数据
+//mysql中第一个数据的下标为0；
+```
+limit + offset:[题目](https://www.nowcoder.com/practice/ec1ca44c62c14ceb990c3c40def1ec6c?tpId=82&tqId=29754&rp=1&ru=/exam/oj&qru=/exam/oj&sourceUrl=%2Fexam%2Foj%3Fpage%3D1%26tab%3DSQL%25E7%25AF%2587%26topicId%3D82&difficulty=undefined&judgeStatus=undefined&tags=&title=)
+```sql
+select * from user limit 1 offset 2
+//limit 1 = limit 0,1 :从下标0的记录开始，取一条
+//offset 2 : 往下移动两次
+//所以最终取得是第三条数据
+```
+## select
+* select distinct
+```sql
+select distinct hire_date from employees
+//先把所有的hire_date取出来，然后去重
 ```
 ## 联结表
 * `inner join`&`outer join`
@@ -287,8 +310,18 @@ select * from article where article_id in (1,2,3)
     * 外连接细分为左（外）连接和右（外）连接；区别就是驱动表的不同：左连接是左边的表为驱动表，右连接是右边的表为驱动表
     > Wanring:
     使用left join 和 right join时，必须要有on过滤条件，不然语法报错
-* `left join`
-`A left join B on xx`：将A表中的数据进行过滤后都存在结果集中，对于A中结果集的每一条数据，根据on条件去B表中找匹配的数据，插到A中该条数据的右边，如果有多条那就插入多条，如果一条都没有就插入NULL
+* `left join`的执行流程
+```sql
+SELECT left_tbl.*
+  FROM left_tbl LEFT JOIN right_tbl ON left_tbl.id = right_tbl.id
+  WHERE right_tbl.id IS NULL;
+```
+首先拿到左边表的第一条数据，去进行m次匹配(m为右边表的记录数)
+如果满足匹配条件(on子句：左边记录的id等于右边记录的id)，就将这两个记录联结起来并且加入结果集...
+最后得到整个结果集，在通过where子句进行记录过滤
+> on子句和where子句的区别：
+来自[官方文档](https://dev.mysql.com/doc/refman/8.0/en/join.html)，Generally, the ON clause serves for conditions that specify how to join tables, and the WHERE clause restricts which rows to include in the result set.
+
 * `natural join`
 两张表A、B放在一起，找到列名相同的列（不妨假设id），开始匹配
 A中的第一条记录id=100，开始对B从上往下找id为100的，找到的话就将两条记录拼接
@@ -662,18 +695,6 @@ select @@tx_isolation # 查看事务的隔离级别
     > 商品id,类别id,类别名称 
     类别名称依赖于->类别id,类别id依赖于->商品id //不满足3NF
     解决方法：去除类别名称，把类别id与类别名称单独建一张表
-# Select进阶
-* order by：对数据排序
-    * desc
-    order by money默认对money升序排列，如果向反过来，就可以使用desc
-    `order by money desc`
-* group by：对数据分组
-* limit
-```sql
-select * from user limit 2;//只看前两个
-select * from user limit 2,4//从结果下标为2的地方开始，往下4个，即（2,3,4,5)；显示这些数据
-//mysql中第一个数据的下标为0；
-```
 # 数据库的备份与恢复
 ## MySQLdump逻辑备份
 * 备份单个数据库
