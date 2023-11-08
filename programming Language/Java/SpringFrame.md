@@ -844,6 +844,13 @@ log.error("这是{}","{}占位符");//通过{}进行占位
 ```
 
 ## 注解
+### `@Resource`与`@Autowire`的区别？
+* [参考](https://www.sourceallies.com/2011/08/spring-injection-with-resource-and-autowired/)
+
+从容器中寻找bean的顺序不同
+<img src="./images/Resouces vs Autowire.png">
+
+
 * 前端字符串"2023-06-12"如果在controller中转化为LocalDate?
 ```java
 @RequestParam("inputDate")@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate inputDate

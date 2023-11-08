@@ -113,7 +113,26 @@ sudo systemctl enable --now mysql # not only enbale mysql,but also start mysql
 ```bash
 sudo systemctl disable mysql # 将Mysql设置为不是开机自启动
 ```
+## `netstat`
+```bash
+netstat -ano # 通常使用的命令
+```
+### 选项含义
+* -n
+<img src="./image/netstat -n.png">
 
+* -a
+显示TCP+UDP
+
+* -o
+显示的结果中会显示pid
+
+### 案例
+situation：当在本地启动springboot项目的时候，发现端口9000已经被占用，导致启动失败。我想知道这个端口被哪个进程占用着。如果这个进程不重要，我可以把它给停止了
+```bash
+netstat -ano | findstr 9000 # 得到使用9000端口的pid
+tasklist | findstr 19796 # 通过pid得到进程
+```
 # Virtual Box
 ## 虚拟机中设置桥接，显示no select的问题
 通过[该帖子](https://stackoverflow.com/a/47418596)，发现自己的以太网属性中没有virtualBox相关的Driver

@@ -36,5 +36,12 @@ e.g.  If you're genuinely happy to connect with your old friend, make it a point
 Ten to one,you slap the moolie out,you come home in under a month
 * count on sb to do sth:
 指望：i'm counting on you to do this
-
-31min
+* pull out
+开车上路
+before we pull out,we need to have a talk
+* rat sb out
+告发
+rat me out for something i didn't even do
+* coon
+黑鬼
+come on man, these coons could play on anything you put in front of them

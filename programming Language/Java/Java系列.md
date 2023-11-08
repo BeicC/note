@@ -578,6 +578,7 @@ equals方法
 增、删、改、查、插、长度、遍历
 add、remove、set、get、add、size、iterator
 * ArrayList
+    * [ArrayList中的remove操作](https://www.uoften.com/article/218319.html)
     * `RandomAccess`接口
     1、需要背景
     `RandomAccess`是给算法看的，如Collections中的binarySearch，如果某个List实现类RandomAccess接口，那么就会选择更高效的二分实现（直接通过下标访问的indexBinarySearch）。如ArrayList
@@ -696,6 +697,8 @@ LinkedHashMap继承HashMap，可以在遍历的时候按照添加的顺序去遍
 TreeMap可以保证按照key进行排序，实现排序遍历
 
 ### HashMap
+* HashMap中的Hash函数
+
 * HashMap的扩容机制
 在put第一个元素的时候会new一个长度为16的Node数组(table);
 如果往里面放的元素超过了threshold，就会去扩容：
@@ -2228,11 +2231,16 @@ invokespecial指令：
     ```
     > 初始化阶段的clinit()并不是一定会被调用，类的主动使用会调用clinit，被动使用则不会
     什么是类的主动使用or被动使用？
-* 双亲委派机制
-    * 什么是双亲委派机制？
-    在日常编写代码时，如果第一次用到一个类，jvm就会通过classloader进行加载，这个任务首先交给appclassloader，但appclassloader不会上来就自己加载，而是会将任务往上抛给上一级extclassloader，extclassloader抛给bootstrapclassloader；然后从bootstrapclassloader开始决定是否要加载这个类，如果不归他加载，就把加载任务往下抛
-    * 为什么要使用双亲委派？
-    1.安全：如果没有双亲委派，我在一个已经写好的工程下，自定义java.lang.String类，那项目运行起来的时候用的String都会变成我写的，项目异常
+## 双亲委派机制
+* 什么是双亲委派机制？
+在日常编写代码时，如果第一次用到一个类，jvm就会通过classloader进行加载，这个任务首先交给appclassloader，但appclassloader不会上来就自己加载，而是会将任务往上抛给上一级extclassloader，extclassloader抛给bootstrapclassloader；然后从bootstrapclassloader开始决定是否要加载这个类，如果不归他加载，就把加载任务往下抛
+* 为什么要使用双亲委派？
+1.避免类的重复加载
+比如加载核心库中的Object类：
+appclassloader拿到加载请求，先往上抛
+extclassloader拿到请求，也往上抛
+bootstrapclassloader拿到请求，发现属于自己管，会首先判断这个类有没有被加载。如果已经被加载了，就不会再次加载
+2.安全,防止核心类被篡改：如果没有双亲委派，我在一个已经写好的工程下，自定义java.lang.String类，那项目运行起来的时候用的String都会变成我写的，项目异常
 ## JVM运行时数据区
 <img src="./%E5%8D%95%E4%B8%AAJava%E7%A8%8B%E5%BA%8F%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E5%86%85%E5%AD%98.png" width="300px" />
 
