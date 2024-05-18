@@ -45,3 +45,30 @@ rat me out for something i didn't even do
 * coon
 黑鬼
 come on man, these coons could play on anything you put in front of them
+
+# Succession
+* shiz
+you are shiz = you are awesome
+* vintage
+you want me to send a vintage jaguar over your house today?
+* inconvenience
+i hope we haven't inconvenienced you
+* outfit
+一小撮人
+we appreciate you are interested in our little outfit
+* blow up
+把东西吹起来=搞糟
+come on! Don't blow this up
+* track record
+一路的记录
+I got a track record from founding one of the most excited media brand in the world
+* salvage
+从（坏情况中）抢救
+how can we salvage this?
+* bad juju
+the bad juju 这个不好的事情
+* finesse
+巧妙的处理事情
+finesseing？ Good!
+* be over
+i'm so over it 我早就不在意了

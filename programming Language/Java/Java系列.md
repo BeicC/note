@@ -767,6 +767,16 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 
 
 ### TreeMap
+TreeMap可以类比C++中的map（而不是unordered_map),两者重点突出**有序**。如下
+<img src="./images/TreeMap.png">
+
+#### TreeMap.floorKey(24)
+作用：返回≤24中最大的key
+类似于C++中的map.lower_bound(24);
+时间复杂度是：
+
+#### TreeMap.remove(key)
+时间复杂度是：
 
 ### Properties:
 1、常用来处理配置文件
