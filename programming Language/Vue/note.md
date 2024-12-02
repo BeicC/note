@@ -33,3 +33,10 @@ v-bind简写为:
 <img :src="imageSrc" />
 ```
 上面的代码意思是将imageSrc的值绑定到img标签的src属性上；这样src的值是动态的
+
+* L2
+`{{}}`
+* L3
+`v-bind`
+* L4
+`v-if`与`v-show`
