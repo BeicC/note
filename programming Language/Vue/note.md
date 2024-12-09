@@ -7,6 +7,47 @@ package.json中的dependencies与devDependencies的区别
 npm install -D # 安装开发环境的依赖
 npm install # 安装生产环境的依赖
 ```
+# Vue基础
+* 在main.js中new Vue()
+```js
+new Vue({
+  el: '#app',
+  i18n,
+  store,
+  router,
+  components: { App },
+  template: '<App/>',
+  render: h => h(App)
+})
+```
+这个el是什么意思？
+表示Vue这个黑盒子挂载到了html中的某个元素上，这个元素的id为app
+在这个元素里面就可以使用Vue这个黑盒子
+![alt text](image-3.png)
+
+<hr>
+这个template什么意思？
+表示现在index.html中找到id为app的元素，然后将App组件放到这个元素中
+
+```html
+<div id="app">
+  <App/>
+</div>
+```
+<hr>
+这个render是什么意思？
+
+1、通过`import Vue from 'vue'`引入的是一个阉割版的vue.js文件
+2、使用阉割版的vue.js文件，需要使用render函数来渲染组件
+3、`render: h => h(App)`表示使用render函数来渲染App变量
+> 使用render的意义是：在最终通过webpack打包的产物中，不包括模板解析器
+
+* Q：如果我在main.js中`import vue from 'vue'`，请问引入的是哪个js文件？
+![alt text](image-4.png)
+## vue.config.js
+该文件用来配置vue脚手架的
+
+
 # Vue指令
 * v-on
 ```vue
@@ -40,3 +81,26 @@ v-bind简写为:
 `v-bind`
 * L4
 `v-if`与`v-show`
+* L5
+`v-for`
+* L6
+`v-on:click`
+* L7
+`:class`
+
+# Vue组件
+* 为什么要使用组件？
+before：
+![alt text](image.png)
+middle：
+JS的模块化：解决JS代码引用的先后顺序
+after：
+![alt text](image-1.png)
+
+* 项目中开发组件
+![alt text](image-2.png)
+
+# Babel
+babel是js的编译器，将es6的代码编译成es5的代码
+* 为什么要用babel
+因为浏览器对es6的支持度不够，所以需要将es6的代码编译成es5的代码
