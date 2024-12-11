@@ -44,6 +44,16 @@ new Vue({
 
 * Q：如果我在main.js中`import vue from 'vue'`，请问引入的是哪个js文件？
 ![alt text](image-4.png)
+
+## props属性
+![alt text](image-6.png)
+外部就可以这样使用
+```vue
+<BackTop parentClassName="xxx" scrollClassName="xxx"/>
+```
+即组件里面的值是通过外部传进来的
+
+
 ## vue.config.js
 该文件用来配置vue脚手架的
 
@@ -68,7 +78,8 @@ v-on:click可以缩写为@click
 ```
 @click.stop可以阻止事件冒泡
 
-* v-bind
+## v-bind
+> v-bind只要一写，双引号里面的内容就被看作js表达式进行运算
 v-bind简写为:
 ```vue
 <img :src="imageSrc" />
@@ -99,6 +110,23 @@ after：
 
 * 项目中开发组件
 ![alt text](image-2.png)
+
+# scoped
+什么意思？
+![alt text](image-5.png)
+* 背景：
+在每个component中的style标签中写的样式，最终都会汇总在一起；
+这样就会出现命名冲突的问题；
+使用scoped样式，可以解决这个问题；
+
+# 组件的自定义事件
+
+
+# 全局事件总线
+* 作用：任意组件之间的数据传递
+
+# Vuex
+
 
 # Babel
 babel是js的编译器，将es6的代码编译成es5的代码
